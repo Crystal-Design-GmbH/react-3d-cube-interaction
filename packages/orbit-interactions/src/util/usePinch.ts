@@ -10,6 +10,7 @@ export interface UsePinchParams {
    * Defaults to -10
    */
   minZoom?: number;
+  onZoomEnd?: (zoom: number) => void;
 }
 
 function calcTwoFingerDistance(e: TouchEvent) {
@@ -23,6 +24,7 @@ export default function usePinch({
   interactionElement,
   minZoom = -10,
   maxZoom = 10,
+  onZoomEnd = () => {},
 }: UsePinchParams) {
   const [zoom, setZoomFactor] = useState<number>(0);
   const [isPinching, setPinching] = useState<boolean>(false);
@@ -66,8 +68,13 @@ export default function usePinch({
     function onTouchEnd(e: TouchEvent) {
       if (e.touches.length < 2) {
         initialDist = 0;
-        setZoomFactor(0);
         setPinching(false);
+        setZoomFactor((currZoom) => {
+          if (currZoom !== 0) {
+            onZoomEnd(currZoom);
+          }
+          return 0;
+        });
       }
     }
 

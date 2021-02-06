@@ -14,6 +14,7 @@ import {
   ControlElementRotation,
   calculateElementRotation,
   QuadrantType,
+  CalculateElementRotationResult,
 } from './util/math';
 import {
   AllPointerEventTypes,
@@ -22,7 +23,7 @@ import {
 } from './util/pointer-events';
 import usePinch, { UsePinchParams } from './util/usePinch';
 
-interface Props extends UsePinchParams {
+interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
   /**
    * Element on which to bind
    * click/touch listeners.
@@ -56,29 +57,17 @@ const OrbitInteractions: React.FC<Props> = ({
     rotY: 0,
   });
 
-  function resetRotation() {
-    setRotationState({
-      rotX: 0,
-      rotY: 0,
-    });
-  }
-
-  const { zoom, isPinching } = usePinch({ interactionElement, ...props });
-
-  useEffect(() => {
-    // TODO: Only fire event at end of interaction!
-    onRotationChange(elemRotation);
-  }, [onRotationChange, elemRotation]);
-
-  useEffect(() => {
-    // TODO: Only fire event at end of interaction!
-    onZoomChange(zoom);
-  }, [onZoomChange, zoom]);
+  const { zoom, isPinching } = usePinch({
+    interactionElement,
+    onZoomEnd: onZoomChange,
+    ...props,
+  });
 
   useEffect(() => {
     if (!interactionElement || isPinching) return;
     let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
     let lastQuadrant: QuadrantType | undefined = undefined;
+    let currRot: CalculateElementRotationResult | undefined = undefined;
 
     const { width: elemWidth } = interactionElement.getBoundingClientRect();
 
@@ -90,7 +79,7 @@ const OrbitInteractions: React.FC<Props> = ({
     const onPointerMove = (event: AllPointerEventTypes) => {
       const e = normalizePointerEvent(event);
       if (pointerStartEvent) {
-        const newRotation = calculateElementRotation({
+        currRot = calculateElementRotation({
           startPos: {
             x: pointerStartEvent.clientX,
             y: pointerStartEvent.clientY,
@@ -101,18 +90,24 @@ const OrbitInteractions: React.FC<Props> = ({
           },
           elemWidth,
         });
-        if (lastQuadrant !== newRotation.quadrant) {
+        if (lastQuadrant !== currRot.quadrant) {
           // Reset start position if user changes direction
           pointerStartEvent = e;
         }
-        lastQuadrant = newRotation.quadrant;
-        setRotationState(newRotation);
+        lastQuadrant = currRot.quadrant;
+        setRotationState(currRot);
       }
     };
 
     const onInteractionEnd = (event: AllPointerEventTypes) => {
       pointerStartEvent = undefined;
-      resetRotation();
+      setRotationState({
+        rotX: 0,
+        rotY: 0,
+      });
+      if (currRot) {
+        onRotationChange(currRot);
+      }
     };
 
     interactionElement.addEventListener('touchstart', onPointerDown);

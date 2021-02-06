@@ -5,10 +5,18 @@ interface Props {}
 
 import './index.css';
 
-const App = (props: Props) => {
+const App = ({}: Props) => {
   return (
     <div className="orbit-container">
-      <OrbitInteractions interactionElement={document.body} />
+      <OrbitInteractions
+        onRotationChange={(newRot) => {
+          console.log('rotation change', newRot);
+        }}
+        onZoomChange={(newZoom) => {
+          console.log('zoom change', newZoom);
+        }}
+        interactionElement={document.body}
+      />
     </div>
   );
 };

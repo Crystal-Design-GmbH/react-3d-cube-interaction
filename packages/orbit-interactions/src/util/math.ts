@@ -29,7 +29,7 @@ function calcAngleDegrees({ x, y }: Vector2) {
 
 export type QuadrantType = '+x' | '+y' | '-x' | '-y';
 
-interface CalculateElementRotationResult extends ControlElementRotation {
+export interface CalculateElementRotationResult extends ControlElementRotation {
   quadrant: QuadrantType;
 }
 

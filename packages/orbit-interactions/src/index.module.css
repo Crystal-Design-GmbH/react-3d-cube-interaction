@@ -36,26 +36,26 @@
 }
 
 .cube-face-front {
-  background: hsla(0, 100%, 50%, var(--faceTransparency));
+  /* background: rgba(0, 0, 0, var(--faceTransparency)); */
   transform: rotateY(0deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-right {
-  background: hsla(60, 100%, 50%, var(--faceTransparency));
+  /* background: rgba(200, 200, 200, var(--faceTransparency)); */
   transform: rotateY(90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-back {
-  background: hsla(120, 100%, 50%, var(--faceTransparency));
+  /* background: rgba(0, 0, 0, var(--faceTransparency)); */
   transform: rotateY(180deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-left {
-  background: hsla(180, 100%, 50%, var(--faceTransparency));
+  /* background: rgba(200, 200, 200, var(--faceTransparency)); */
   transform: rotateY(-90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-top {
-  background: hsla(240, 100%, 50%, var(--faceTransparency));
+  /* background: rgba(100, 100, 100, var(--faceTransparency)); */
   transform: rotateX(90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-bottom {
-  background: hsla(300, 100%, 50%, var(--faceTransparency));
+  /* background: rgba(100, 100, 100, var(--faceTransparency)); */
   transform: rotateX(-90deg) translateZ(calc(var(--size) / 2));
 }

@@ -11,3 +11,8 @@ body {
 ```
 
 This disabled the default browser drag interactions (like drag to reload etc)
+
+## TODO
+
+- Custom CSS classes
+- Initial rot,zoom
