@@ -1,0 +1,60 @@
+:root {
+  --faceTransparency: 0.7;
+}
+
+.control-element-container,
+.control-element-container * {
+  box-sizing: border-box;
+}
+
+.control-element-container {
+  width: 100%;
+  height: 100%;
+  perspective: 400px;
+  pointer-events: none;
+}
+
+.control-element {
+  width: 200px;
+  height: 200px;
+  position: relative;
+  transform-style: preserve-3d;
+  transform: translateZ(-100px) rotateY(0deg) rotateX(0deg);
+}
+
+.cube-face {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  border: 2px solid black;
+  line-height: 200px;
+  font-size: 40px;
+  font-weight: bold;
+  color: white;
+  text-align: center;
+}
+
+.cube-face-front {
+  background: hsla(0, 100%, 50%, var(--faceTransparency));
+  transform: rotateY(0deg) translateZ(100px);
+}
+.cube-face-right {
+  background: hsla(60, 100%, 50%, var(--faceTransparency));
+  transform: rotateY(90deg) translateZ(100px);
+}
+.cube-face-back {
+  background: hsla(120, 100%, 50%, var(--faceTransparency));
+  transform: rotateY(180deg) translateZ(100px);
+}
+.cube-face-left {
+  background: hsla(180, 100%, 50%, var(--faceTransparency));
+  transform: rotateY(-90deg) translateZ(100px);
+}
+.cube-face-top {
+  background: hsla(240, 100%, 50%, var(--faceTransparency));
+  transform: rotateX(90deg) translateZ(100px);
+}
+.cube-face-bottom {
+  background: hsla(300, 100%, 50%, var(--faceTransparency));
+  transform: rotateX(-90deg) translateZ(100px);
+}

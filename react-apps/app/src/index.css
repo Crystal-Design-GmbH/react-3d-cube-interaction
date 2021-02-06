@@ -1,0 +1,17 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body,
+html,
+#app {
+  height: 100%;
+  width: 100%;
+}
+
+.orbit-container {
+  position: fixed;
+  right: 3em;
+  bottom: 3em;
+}
