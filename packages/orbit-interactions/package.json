@@ -2,7 +2,7 @@
   "name": "orbit-interactions",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "COMMERCIAL",
   "devDependencies": {
     "react": "17.0.1",
     "react-dom": "17.0.1",

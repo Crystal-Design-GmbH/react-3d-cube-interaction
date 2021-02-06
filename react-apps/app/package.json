@@ -2,7 +2,7 @@
   "name": "app",
   "version": "1.0.0",
   "main": "index.js",
-  "license": "MIT",
+  "license": "COMMERCIAL",
   "devDependencies": {
     "@testing-library/react": "^11.2.3",
     "@testing-library/jest-dom": "^5.11.9",
