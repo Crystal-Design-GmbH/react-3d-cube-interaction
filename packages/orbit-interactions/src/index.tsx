@@ -20,8 +20,9 @@ import {
   NormalizedInteractionEvent,
   normalizePointerEvent,
 } from './util/pointer-events';
+import usePinch, { UsePinchParams } from './util/usePinch';
 
-interface Props {
+interface Props extends UsePinchParams {
   /**
    * Element on which to bind
    * click/touch listeners.
@@ -36,12 +37,19 @@ interface Props {
    */
   size?: string;
   onRotationChange?: (p: ControlElementRotation) => void;
+  /**
+   * Returns a scaled value:
+   * 10 = width of interactionElement
+   */
+  onZoomChange?: (p: number) => void;
 }
 
 const OrbitInteractions: React.FC<Props> = ({
-  interactionElement = document.body,
+  interactionElement,
   size = '130px',
   onRotationChange = () => {},
+  onZoomChange = () => {},
+  ...props
 }) => {
   const [elemRotation, setRotationState] = useState<ControlElementRotation>({
     rotX: 0,
@@ -55,11 +63,20 @@ const OrbitInteractions: React.FC<Props> = ({
     });
   }
 
+  const { zoom, isPinching } = usePinch({ interactionElement, ...props });
+
   useEffect(() => {
+    // TODO: Only fire event at end of interaction!
     onRotationChange(elemRotation);
   }, [onRotationChange, elemRotation]);
 
   useEffect(() => {
+    // TODO: Only fire event at end of interaction!
+    onZoomChange(zoom);
+  }, [onZoomChange, zoom]);
+
+  useEffect(() => {
+    if (!interactionElement || isPinching) return;
     let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
     let lastQuadrant: QuadrantType | undefined = undefined;
 
@@ -116,7 +133,7 @@ const OrbitInteractions: React.FC<Props> = ({
         interactionElement.removeEventListener('mouseup', onInteractionEnd);
       }, 0);
     };
-  }, [interactionElement]);
+  }, [interactionElement, isPinching]);
 
   return (
     <div
@@ -130,7 +147,9 @@ const OrbitInteractions: React.FC<Props> = ({
       <div
         className={controlElement}
         style={{
-          transform: `translateZ(-100px) rotateY(${elemRotation.rotY}deg) rotateX(${elemRotation.rotX}deg)`,
+          transform: `scale(${zoom / 10 + 1}) translateZ(-100px) rotateY(${
+            elemRotation.rotY
+          }deg) rotateX(${elemRotation.rotX}deg)`,
         }}
       >
         <div className={`${cubeFace} ${cubeFaceFront}`} />

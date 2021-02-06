@@ -8,7 +8,7 @@ import './index.css';
 const App = (props: Props) => {
   return (
     <div className="orbit-container">
-      <OrbitInteractions />
+      <OrbitInteractions interactionElement={document.body} />
     </div>
   );
 };
