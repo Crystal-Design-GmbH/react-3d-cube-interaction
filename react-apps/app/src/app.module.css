@@ -1,0 +1,13 @@
+.cube-face-left {
+  /* background: blue; */
+}
+
+.cube-face-right {
+  /* background: red; */
+}
+
+.orbit-container {
+  position: fixed;
+  right: 3em;
+  bottom: 3em;
+}

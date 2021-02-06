@@ -13,9 +13,3 @@ html,
   as it will reload on scroll etc **/
   overscroll-behavior: contain;
 }
-
-.orbit-container {
-  position: fixed;
-  right: 3em;
-  bottom: 3em;
-}

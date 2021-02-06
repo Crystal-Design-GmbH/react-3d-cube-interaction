@@ -43,6 +43,15 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
    * 10 = width of interactionElement
    */
   onZoomChange?: (p: number) => void;
+  classnames?: Partial<{
+    cubeFace: string;
+    cubeFaceFront: string;
+    cubeFaceBack: string;
+    cubeFaceRight: string;
+    cubeFaceLeft: string;
+    cubeFaceTop: string;
+    cubeFaceBottom: string;
+  }>;
 }
 
 const OrbitInteractions: React.FC<Props> = ({
@@ -50,6 +59,7 @@ const OrbitInteractions: React.FC<Props> = ({
   size = '130px',
   onRotationChange = () => {},
   onZoomChange = () => {},
+  classnames,
   ...props
 }) => {
   const [elemRotation, setRotationState] = useState<ControlElementRotation>({
@@ -147,12 +157,24 @@ const OrbitInteractions: React.FC<Props> = ({
           }deg) rotateX(${elemRotation.rotX}deg)`,
         }}
       >
-        <div className={`${cubeFace} ${cubeFaceFront}`} />
-        <div className={`${cubeFace} ${cubeFaceBack}`} />
-        <div className={`${cubeFace} ${cubeFaceRight}`} />
-        <div className={`${cubeFace} ${cubeFaceLeft}`} />
-        <div className={`${cubeFace} ${cubeFaceTop}`} />
-        <div className={`${cubeFace} ${cubeFaceBottom}`} />
+        <div
+          className={`${cubeFace} ${cubeFaceFront} ${classnames?.cubeFace} ${classnames?.cubeFaceFront}`}
+        />
+        <div
+          className={`${cubeFace} ${cubeFaceBack} ${classnames?.cubeFace} ${classnames?.cubeFaceBack}`}
+        />
+        <div
+          className={`${cubeFace} ${cubeFaceRight} ${classnames?.cubeFace} ${classnames?.cubeFaceRight}`}
+        />
+        <div
+          className={`${cubeFace} ${cubeFaceLeft} ${classnames?.cubeFace} ${classnames?.cubeFaceLeft}`}
+        />
+        <div
+          className={`${cubeFace} ${cubeFaceTop} ${classnames?.cubeFace} ${classnames?.cubeFaceTop}`}
+        />
+        <div
+          className={`${cubeFace} ${cubeFaceBottom} ${classnames?.cubeFace} ${classnames?.cubeFaceBottom}`}
+        />
       </div>
     </div>
   );

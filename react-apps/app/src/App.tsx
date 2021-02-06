@@ -3,11 +3,11 @@ import OrbitInteractions from 'orbit-interactions';
 
 interface Props {}
 
-import './index.css';
+import { cubeFaceLeft, cubeFaceRight, orbitContainer } from './app.module.css';
 
 const App = ({}: Props) => {
   return (
-    <div className="orbit-container">
+    <div className={orbitContainer}>
       <OrbitInteractions
         onRotationChange={(newRot) => {
           console.log('rotation change', newRot);
@@ -16,6 +16,10 @@ const App = ({}: Props) => {
           console.log('zoom change', newZoom);
         }}
         interactionElement={document.body}
+        classnames={{
+          cubeFaceLeft,
+          cubeFaceRight,
+        }}
       />
     </div>
   );
