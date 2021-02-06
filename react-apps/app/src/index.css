@@ -8,6 +8,10 @@ html,
 #app {
   height: 100%;
   width: 100%;
+  /** Without this,
+  UX is very bad on touch devices,
+  as it will reload on scroll etc **/
+  overscroll-behavior: contain;
 }
 
 .orbit-container {

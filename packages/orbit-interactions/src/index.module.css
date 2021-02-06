@@ -1,5 +1,6 @@
 :root {
   --faceTransparency: 0.7;
+  --size: 120px;
 }
 
 .control-element-container,
@@ -15,8 +16,8 @@
 }
 
 .control-element {
-  width: 200px;
-  height: 200px;
+  width: var(--size);
+  height: var(--size);
   position: relative;
   transform-style: preserve-3d;
   transform: translateZ(-100px) rotateY(0deg) rotateX(0deg);
@@ -24,10 +25,10 @@
 
 .cube-face {
   position: absolute;
-  width: 200px;
-  height: 200px;
+  width: var(--size);
+  height: var(--size);
   border: 2px solid black;
-  line-height: 200px;
+  line-height: var(--size);
   font-size: 40px;
   font-weight: bold;
   color: white;
@@ -36,25 +37,25 @@
 
 .cube-face-front {
   background: hsla(0, 100%, 50%, var(--faceTransparency));
-  transform: rotateY(0deg) translateZ(100px);
+  transform: rotateY(0deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-right {
   background: hsla(60, 100%, 50%, var(--faceTransparency));
-  transform: rotateY(90deg) translateZ(100px);
+  transform: rotateY(90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-back {
   background: hsla(120, 100%, 50%, var(--faceTransparency));
-  transform: rotateY(180deg) translateZ(100px);
+  transform: rotateY(180deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-left {
   background: hsla(180, 100%, 50%, var(--faceTransparency));
-  transform: rotateY(-90deg) translateZ(100px);
+  transform: rotateY(-90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-top {
   background: hsla(240, 100%, 50%, var(--faceTransparency));
-  transform: rotateX(90deg) translateZ(100px);
+  transform: rotateX(90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-bottom {
   background: hsla(300, 100%, 50%, var(--faceTransparency));
-  transform: rotateX(-90deg) translateZ(100px);
+  transform: rotateX(-90deg) translateZ(calc(var(--size) / 2));
 }

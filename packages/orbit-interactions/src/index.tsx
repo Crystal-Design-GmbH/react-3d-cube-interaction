@@ -28,29 +28,25 @@ interface Props {
    * Defaults to document.
    */
   interactionElement?: HTMLElement;
+  /**
+   * Size of the cube.
+   * Must be an __absolute__
+   * CSS Value, e.g. px, em, vh, etc.
+   * Defaults to 120px
+   */
+  size?: string;
+  onRotationChange?: (p: ControlElementRotation) => void;
 }
 
 const OrbitInteractions: React.FC<Props> = ({
   interactionElement = document.body,
+  size = '130px',
+  onRotationChange = () => {},
 }) => {
   const [elemRotation, setRotationState] = useState<ControlElementRotation>({
     rotX: 0,
     rotY: 0,
   });
-
-  function updateElementRotation(
-    getNewRot: (
-      currRot: ControlElementRotation,
-    ) => Partial<ControlElementRotation>,
-  ) {
-    setRotationState((currRot) => {
-      const newRot = getNewRot(currRot);
-      return {
-        ...currRot,
-        ...newRot,
-      };
-    });
-  }
 
   function resetRotation() {
     setRotationState({
@@ -60,7 +56,10 @@ const OrbitInteractions: React.FC<Props> = ({
   }
 
   useEffect(() => {
-    let didCancel = false;
+    onRotationChange(elemRotation);
+  }, [onRotationChange, elemRotation]);
+
+  useEffect(() => {
     let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
     let lastQuadrant: QuadrantType | undefined = undefined;
 
@@ -106,7 +105,6 @@ const OrbitInteractions: React.FC<Props> = ({
     interactionElement.addEventListener('touchend', onInteractionEnd);
     interactionElement.addEventListener('mouseup', onInteractionEnd);
     return () => {
-      didCancel = true;
       // Give touchend handlers chance to execute
       setTimeout(() => {
         interactionElement.removeEventListener('touchstart', onPointerDown);
@@ -121,7 +119,14 @@ const OrbitInteractions: React.FC<Props> = ({
   }, [interactionElement]);
 
   return (
-    <div className={controlElementContainer}>
+    <div
+      className={controlElementContainer}
+      style={
+        {
+          '--size': size,
+        } as any
+      }
+    >
       <div
         className={controlElement}
         style={{
