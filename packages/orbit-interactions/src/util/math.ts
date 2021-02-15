@@ -3,6 +3,17 @@ export interface ControlElementRotation {
   rotY: number;
 }
 
+export function snapRotation({
+  rotX,
+  rotY,
+}: ControlElementRotation): ControlElementRotation {
+  const ROUND_TO = 5;
+  return {
+    rotX: Math.round(rotX / ROUND_TO) * ROUND_TO,
+    rotY: Math.round(rotY / ROUND_TO) * ROUND_TO,
+  };
+}
+
 export function sanitizeRotation({
   rotX,
   rotY,

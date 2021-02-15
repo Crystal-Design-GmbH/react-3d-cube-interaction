@@ -15,6 +15,7 @@ import {
   calculateElementRotation,
   CalculateElementRotationResult,
   sanitizeRotation,
+  snapRotation,
 } from './util/math';
 import {
   AllPointerEventTypes,
@@ -149,7 +150,13 @@ const OrbitInteractions: React.FC<Props> = ({
     const onInteractionEnd = (event: AllPointerEventTypes) => {
       pointerStartEvent = undefined;
       if (currRot) {
-        onRotationChange(currRot);
+        const snappedRot = snapRotation(currRot);
+        currRot = {
+          ...currRot,
+          ...snappedRot,
+        };
+        onRotationChange(snappedRot);
+        setRotationState(snappedRot);
       }
     };
 
