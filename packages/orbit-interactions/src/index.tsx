@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import {
   controlElementContainer,
   controlElement,
@@ -36,6 +36,11 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
    * Defaults to 120px
    */
   size?: string;
+  /**
+   * Called when rotation changes.
+   * X rotation is a value between -90° and 0°
+   * Y rotation is a value between 0° and 360°
+   */
   onRotationChange?: (p: ControlElementRotation) => void;
   /**
    * Returns a scaled value:
@@ -51,6 +56,18 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
     cubeFaceTop: string;
     cubeFaceBottom: string;
   }>;
+  /**
+   * Defaults to german cube
+   * face descriptors
+   */
+  cubeFaceChildren?: {
+    front: ReactNode;
+    back: ReactNode;
+    right: ReactNode;
+    left: ReactNode;
+    top: ReactNode;
+    bottom: ReactNode;
+  };
 }
 
 const OrbitInteractions: React.FC<Props> = ({
@@ -59,6 +76,14 @@ const OrbitInteractions: React.FC<Props> = ({
   onRotationChange = () => {},
   onZoomChange = () => {},
   classnames,
+  cubeFaceChildren = {
+    back: 'hinten',
+    bottom: '',
+    front: 'vorne',
+    left: 'links',
+    right: 'rechts',
+    top: 'oben',
+  },
   ...props
 }) => {
   const [elemRotation, setRotationState] = useState<ControlElementRotation>({
@@ -174,32 +199,32 @@ const OrbitInteractions: React.FC<Props> = ({
         <div
           className={`${cubeFace} ${cubeFaceFront} ${classnames?.cubeFace} ${classnames?.cubeFaceFront}`}
         >
-          front
+          {cubeFaceChildren.front}
         </div>
         <div
           className={`${cubeFace} ${cubeFaceBack} ${classnames?.cubeFace} ${classnames?.cubeFaceBack}`}
         >
-          back
+          {cubeFaceChildren.back}
         </div>
         <div
           className={`${cubeFace} ${cubeFaceRight} ${classnames?.cubeFace} ${classnames?.cubeFaceRight}`}
         >
-          right
+          {cubeFaceChildren.right}
         </div>
         <div
           className={`${cubeFace} ${cubeFaceLeft} ${classnames?.cubeFace} ${classnames?.cubeFaceLeft}`}
         >
-          left
+          {cubeFaceChildren.left}
         </div>
         <div
           className={`${cubeFace} ${cubeFaceTop} ${classnames?.cubeFace} ${classnames?.cubeFaceTop}`}
         >
-          top
+          {cubeFaceChildren.top}
         </div>
         <div
           className={`${cubeFace} ${cubeFaceBottom} ${classnames?.cubeFace} ${classnames?.cubeFaceBottom}`}
         >
-          bottom
+          {cubeFaceChildren.bottom}
         </div>
       </div>
     </div>
