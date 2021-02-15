@@ -29,6 +29,7 @@ const App = ({}: Props) => {
             cubeFaceLeft,
             cubeFaceRight,
           }}
+          size="100px"
         />
       </div>
     </div>
