@@ -13,7 +13,6 @@ import {
 import {
   ControlElementRotation,
   calculateElementRotation,
-  QuadrantType,
   CalculateElementRotationResult,
 } from './util/math';
 import {
@@ -76,7 +75,6 @@ const OrbitInteractions: React.FC<Props> = ({
   useEffect(() => {
     if (!interactionElement || isPinching) return;
     let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
-    let lastQuadrant: QuadrantType | undefined = undefined;
     let currRot: CalculateElementRotationResult | undefined = undefined;
 
     const { width: elemWidth } = interactionElement.getBoundingClientRect();
@@ -89,7 +87,7 @@ const OrbitInteractions: React.FC<Props> = ({
     const onPointerMove = (event: AllPointerEventTypes) => {
       const e = normalizePointerEvent(event);
       if (pointerStartEvent) {
-        currRot = calculateElementRotation({
+        const addRot = calculateElementRotation({
           startPos: {
             x: pointerStartEvent.clientX,
             y: pointerStartEvent.clientY,
@@ -100,21 +98,35 @@ const OrbitInteractions: React.FC<Props> = ({
           },
           elemWidth,
         });
-        if (lastQuadrant !== currRot.quadrant) {
-          // Reset start position if user changes direction
-          pointerStartEvent = e;
-        }
-        lastQuadrant = currRot.quadrant;
-        setRotationState(currRot);
+        pointerStartEvent = e;
+        setRotationState((lastRot) => {
+          let newRotX = lastRot.rotX + addRot.rotX;
+          let newRotY = lastRot.rotY + addRot.rotY;
+          if (newRotX > 0) {
+            newRotX = 0;
+          }
+          if (newRotX < -90) {
+            newRotX = -90;
+          }
+          if (newRotY > 360) {
+            newRotY = newRotY - 360;
+          }
+          if (newRotY < 0) {
+            newRotY = 360 + newRotY;
+          }
+
+          currRot = {
+            ...addRot,
+            rotX: newRotX,
+            rotY: newRotY,
+          };
+          return currRot;
+        });
       }
     };
 
     const onInteractionEnd = (event: AllPointerEventTypes) => {
       pointerStartEvent = undefined;
-      setRotationState({
-        rotX: 0,
-        rotY: 0,
-      });
       if (currRot) {
         onRotationChange(currRot);
       }
@@ -151,33 +163,49 @@ const OrbitInteractions: React.FC<Props> = ({
     >
       <div
         className={controlElement}
-        style={{
-          transform: `scale(${zoom / 10 + 1}) translateZ(-100px) rotateY(${
-            elemRotation.rotY
-          }deg) rotateX(${elemRotation.rotX}deg)`,
-        }}
+        style={
+          {
+            '--zoomFactor': zoom / 10 + 1,
+            '--rotY': `${elemRotation.rotY}deg`,
+            '--rotX': `${elemRotation.rotX}deg`,
+          } as any
+        }
       >
         <div
           className={`${cubeFace} ${cubeFaceFront} ${classnames?.cubeFace} ${classnames?.cubeFaceFront}`}
-        />
+        >
+          front
+        </div>
         <div
           className={`${cubeFace} ${cubeFaceBack} ${classnames?.cubeFace} ${classnames?.cubeFaceBack}`}
-        />
+        >
+          back
+        </div>
         <div
           className={`${cubeFace} ${cubeFaceRight} ${classnames?.cubeFace} ${classnames?.cubeFaceRight}`}
-        />
+        >
+          right
+        </div>
         <div
           className={`${cubeFace} ${cubeFaceLeft} ${classnames?.cubeFace} ${classnames?.cubeFaceLeft}`}
-        />
+        >
+          left
+        </div>
         <div
           className={`${cubeFace} ${cubeFaceTop} ${classnames?.cubeFace} ${classnames?.cubeFaceTop}`}
-        />
+        >
+          top
+        </div>
         <div
           className={`${cubeFace} ${cubeFaceBottom} ${classnames?.cubeFace} ${classnames?.cubeFaceBottom}`}
-        />
+        >
+          bottom
+        </div>
       </div>
     </div>
   );
 };
 
 export default OrbitInteractions;
+
+export { ControlElementRotation };

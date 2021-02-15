@@ -4,7 +4,8 @@
   "description": "",
   "main": "build/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "expose": "ngrok http 8080 -subdomain=diva-orbit"
   },
   "repository": {
     "type": "git",

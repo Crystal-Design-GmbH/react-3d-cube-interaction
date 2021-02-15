@@ -6,13 +6,14 @@
 .control-element-container,
 .control-element-container * {
   box-sizing: border-box;
+  pointer-events: none;
+  user-select: none;
 }
 
 .control-element-container {
   width: 100%;
   height: 100%;
   perspective: 400px;
-  pointer-events: none;
 }
 
 .control-element {
@@ -20,7 +21,8 @@
   height: var(--size);
   position: relative;
   transform-style: preserve-3d;
-  transform: translateZ(-100px) rotateY(0deg) rotateX(0deg);
+  transform: scale(var(--zoomFactor)) translateZ(-100px)
+    rotate3d(1, 0, 0, var(--rotX)) rotate3d(0, 1, 0, var(--rotY));
 }
 
 .cube-face {
@@ -29,33 +31,38 @@
   height: var(--size);
   border: 2px solid black;
   line-height: var(--size);
-  font-size: 40px;
   font-weight: bold;
   color: white;
   text-align: center;
+  text-transform: uppercase;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: sans-serif;
+  font-size: 1rem;
 }
 
 .cube-face-front {
-  /* background: rgba(0, 0, 0, var(--faceTransparency)); */
+  background: rgba(0, 0, 0, var(--faceTransparency));
   transform: rotateY(0deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-right {
-  /* background: rgba(200, 200, 200, var(--faceTransparency)); */
+  background: rgba(200, 200, 200, var(--faceTransparency));
   transform: rotateY(90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-back {
-  /* background: rgba(0, 0, 0, var(--faceTransparency)); */
+  background: rgba(0, 0, 0, var(--faceTransparency));
   transform: rotateY(180deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-left {
-  /* background: rgba(200, 200, 200, var(--faceTransparency)); */
+  background: rgba(200, 200, 200, var(--faceTransparency));
   transform: rotateY(-90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-top {
-  /* background: rgba(100, 100, 100, var(--faceTransparency)); */
+  background: rgba(100, 100, 100, var(--faceTransparency));
   transform: rotateX(90deg) translateZ(calc(var(--size) / 2));
 }
 .cube-face-bottom {
-  /* background: rgba(100, 100, 100, var(--faceTransparency)); */
+  background: rgba(100, 100, 100, var(--faceTransparency));
   transform: rotateX(-90deg) translateZ(calc(var(--size) / 2));
 }
