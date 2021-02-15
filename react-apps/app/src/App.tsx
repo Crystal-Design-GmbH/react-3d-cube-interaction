@@ -29,7 +29,11 @@ const App = ({}: Props) => {
             cubeFaceLeft,
             cubeFaceRight,
           }}
-          size="100px"
+          size="120px"
+          initialRotation={{
+            rotY: 20,
+            rotX: -20,
+          }}
         />
       </div>
     </div>

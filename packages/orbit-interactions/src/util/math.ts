@@ -3,19 +3,29 @@ export interface ControlElementRotation {
   rotY: number;
 }
 
-/**
- * Always returns a number
- * between -180 and 180
- */
-export function sanitizeDeg(deg: number) {
-  let newDeg = deg;
-  if (newDeg < -180) {
-    newDeg = Math.abs(-180 - newDeg);
+export function sanitizeRotation({
+  rotX,
+  rotY,
+}: ControlElementRotation): ControlElementRotation {
+  let newRotX = rotX;
+  let newRotY = rotY;
+  if (newRotX > 0) {
+    newRotX = 0;
   }
-  if (newDeg > 180) {
-    newDeg = -180 + (newDeg - 180);
+  if (newRotX < -90) {
+    newRotX = -90;
   }
-  return newDeg;
+  if (newRotY > 360) {
+    newRotY = newRotY - 360;
+  }
+  if (newRotY < 0) {
+    newRotY = 360 + newRotY;
+  }
+
+  return {
+    rotX: newRotX,
+    rotY: newRotY,
+  };
 }
 
 export interface Vector2 {
@@ -47,10 +57,10 @@ export function calculateElementRotation({
   /**
    * We assume that the full width of
    * the container equals a rotation
-   * of 180°
+   * of 210°
    */
   const pxToDeg = (px: number) => {
-    const onePxInDeg = 180 / elemWidth;
+    const onePxInDeg = 210 / elemWidth;
     return onePxInDeg * px;
   };
 

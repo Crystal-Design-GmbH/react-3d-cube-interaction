@@ -14,6 +14,7 @@ import {
   ControlElementRotation,
   calculateElementRotation,
   CalculateElementRotationResult,
+  sanitizeRotation,
 } from './util/math';
 import {
   AllPointerEventTypes,
@@ -29,6 +30,7 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
    * Defaults to document.
    */
   interactionElement?: HTMLElement;
+  initialRotation?: ControlElementRotation;
   /**
    * Size of the cube.
    * Must be an __absolute__
@@ -76,6 +78,10 @@ const OrbitInteractions: React.FC<Props> = ({
   onRotationChange = () => {},
   onZoomChange = () => {},
   classnames,
+  initialRotation = {
+    rotX: 0,
+    rotY: 0,
+  },
   cubeFaceChildren = {
     back: 'hinten',
     bottom: '',
@@ -86,10 +92,11 @@ const OrbitInteractions: React.FC<Props> = ({
   },
   ...props
 }) => {
-  const [elemRotation, setRotationState] = useState<ControlElementRotation>({
-    rotX: 0,
-    rotY: 0,
-  });
+  const [elemRotation, setRotationState] = useState<ControlElementRotation>(
+    sanitizeRotation(initialRotation),
+  );
+
+  const [faceH, setFaceH] = useState<number>(0);
 
   const { zoom, isPinching } = usePinch({
     interactionElement,
@@ -125,25 +132,14 @@ const OrbitInteractions: React.FC<Props> = ({
         });
         pointerStartEvent = e;
         setRotationState((lastRot) => {
-          let newRotX = lastRot.rotX + addRot.rotX;
-          let newRotY = lastRot.rotY + addRot.rotY;
-          if (newRotX > 0) {
-            newRotX = 0;
-          }
-          if (newRotX < -90) {
-            newRotX = -90;
-          }
-          if (newRotY > 360) {
-            newRotY = newRotY - 360;
-          }
-          if (newRotY < 0) {
-            newRotY = 360 + newRotY;
-          }
+          const sanitizedRot = sanitizeRotation({
+            rotX: lastRot.rotX + addRot.rotX,
+            rotY: lastRot.rotY + addRot.rotY,
+          });
 
           currRot = {
             ...addRot,
-            rotX: newRotX,
-            rotY: newRotY,
+            ...sanitizedRot,
           };
           return currRot;
         });
@@ -193,11 +189,18 @@ const OrbitInteractions: React.FC<Props> = ({
             '--zoomFactor': zoom / 10 + 1,
             '--rotY': `${elemRotation.rotY}deg`,
             '--rotX': `${elemRotation.rotX}deg`,
+            '--fontSize': `${faceH / 4.4}px`,
           } as any
         }
       >
         <div
           className={`${cubeFace} ${cubeFaceFront} ${classnames?.cubeFace} ${classnames?.cubeFaceFront}`}
+          ref={(elem) => {
+            if (elem && faceH === 0) {
+              const { height } = elem.getBoundingClientRect();
+              setFaceH(height);
+            }
+          }}
         >
           {cubeFaceChildren.front}
         </div>
