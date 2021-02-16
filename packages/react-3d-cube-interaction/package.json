@@ -1,7 +1,7 @@
 {
   "name": "react-3d-cube-interaction",
   "version": "0.0.1",
-  "main": "index.js",
+  "main": "./build/react-3d-cube-interaction/src/index.js",
   "license": "MIT",
   "devDependencies": {
     "react": "17.0.1",
