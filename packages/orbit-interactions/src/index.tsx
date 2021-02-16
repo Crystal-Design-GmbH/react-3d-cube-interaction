@@ -9,8 +9,11 @@ import {
   cubeFaceLeft,
   cubeFaceTop,
   cubeFaceBottom,
+  // rotateIcon,
+  // rotateIconHorizontal,
+  // rotateIconVertical,
 } from './index.module.css';
-import { animateObjectValues, rotateToCubeSide } from './util/animate';
+import { rotateToCubeSide } from './util/animate';
 import {
   ControlElementRotation,
   calculateElementRotation,
@@ -24,6 +27,8 @@ import {
   normalizePointerEvent,
 } from './util/pointer-events';
 import usePinch, { UsePinchParams } from './util/usePinch';
+
+// import rotateIconImg from './rotate.svg';
 
 interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
   /**
@@ -227,20 +232,20 @@ const OrbitInteractions: React.FC<Props> = ({
       style={
         {
           '--size': size,
+          '--zoomFactor': zoom / 10 + 1,
+          '--rotY': `${elemRotation.rotY}deg`,
+          '--rotX': `${elemRotation.rotX}deg`,
+          '--fontSize': `${faceH / 4.4}px`,
         } as any
       }
     >
-      <div
-        className={controlElement}
-        style={
-          {
-            '--zoomFactor': zoom / 10 + 1,
-            '--rotY': `${elemRotation.rotY}deg`,
-            '--rotX': `${elemRotation.rotX}deg`,
-            '--fontSize': `${faceH / 4.4}px`,
-          } as any
-        }
-      >
+      {/* <div className={`${rotateIcon} ${rotateIconHorizontal}`}>
+        <img src={rotateIconImg} alt="Rotate" />
+      </div>
+      <div className={`${rotateIcon} ${rotateIconVertical}`}>
+        <img src={rotateIconImg} alt="Rotate" />
+      </div> */}
+      <div className={controlElement}>
         <div
           onClick={rotateToFront}
           className={`${cubeFace} ${cubeFaceFront} ${classnames?.cubeFace} ${classnames?.cubeFaceFront}`}

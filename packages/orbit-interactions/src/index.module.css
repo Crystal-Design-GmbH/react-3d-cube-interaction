@@ -75,3 +75,26 @@
   background: rgba(100, 100, 100, var(--faceTransparency));
   transform: rotateX(-90deg) translateZ(calc(var(--size) / 2));
 }
+
+.rotate-icon {
+  --rotateIconSize: calc(var(--size) / 3);
+  position: absolute;
+  width: var(--rotateIconSize);
+}
+
+/* .rotate-icon img {
+  width: 100%;
+  height: auto;
+}
+
+.rotate-icon-horizontal {
+  top: calc(var(--size) / 2 * -1);
+  left: calc(50% - var(--rotateIconSize) / 2);
+  transform: translateZ(-100px) rotate3d(1, 0, 0, 50deg);
+}
+
+.rotate-icon-vertical {
+  top: calc(var(--size) / 2 - var(--rotateIconSize) / 2);
+  left: calc(var(--size) / 2 * -1);
+  transform: translateZ(-100px) rotate3d(0, 1, 0, 80deg);
+} */
