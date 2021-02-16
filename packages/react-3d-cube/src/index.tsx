@@ -26,7 +26,10 @@ import {
   NormalizedInteractionEvent,
   normalizePointerEvent,
 } from './util/pointer-events';
-import usePinch, { UsePinchParams } from './util/usePinch';
+import usePinch, {
+  CONTAINER_WIDTH_ZOOM_FACTORS,
+  UsePinchParams,
+} from './util/usePinch';
 
 // import rotateIconImg from './rotate.svg';
 
@@ -107,7 +110,7 @@ const OrbitInteractions: React.FC<Props> = ({
 
   const { zoom, isPinching } = usePinch({
     interactionElement,
-    onZoomEnd: onZoomChange,
+    onZoomEnd: (zoom) => onZoomChange(zoom.absoluteZoom),
     ...props,
   });
 
@@ -232,7 +235,7 @@ const OrbitInteractions: React.FC<Props> = ({
       style={
         {
           '--size': size,
-          '--zoomFactor': zoom / 10 + 1,
+          '--zoomFactor': zoom.relativeZoom / CONTAINER_WIDTH_ZOOM_FACTORS + 1,
           '--rotY': `${elemRotation.rotY}deg`,
           '--rotX': `${elemRotation.rotX}deg`,
           '--fontSize': `${faceH / 4.4}px`,

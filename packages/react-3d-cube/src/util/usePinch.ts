@@ -1,5 +1,10 @@
 import { useEffect, useState } from 'react';
 
+interface ZoomData {
+  absoluteZoom: number;
+  relativeZoom: number;
+}
+
 export interface UsePinchParams {
   interactionElement?: HTMLElement;
   /**
@@ -10,8 +15,10 @@ export interface UsePinchParams {
    * Defaults to -10
    */
   minZoom?: number;
-  onZoomEnd?: (zoom: number) => void;
+  onZoomEnd?: (zoom: ZoomData) => void;
 }
+
+export const CONTAINER_WIDTH_ZOOM_FACTORS = 5;
 
 function calcTwoFingerDistance(e: TouchEvent) {
   return Math.hypot(
@@ -26,18 +33,28 @@ export default function usePinch({
   maxZoom = 10,
   onZoomEnd = () => {},
 }: UsePinchParams) {
-  const [zoom, setZoomFactor] = useState<number>(0);
+  const [zoom, setZoomFactor] = useState<ZoomData>({
+    absoluteZoom: 0,
+    relativeZoom: 0,
+  });
   const [isPinching, setPinching] = useState<boolean>(false);
+
+  const validateZoomFactor = (zoomFac: number) => {
+    let newZoomFactor = zoomFac;
+    newZoomFactor = Math.min(maxZoom, newZoomFactor);
+    newZoomFactor = Math.max(minZoom, newZoomFactor);
+    return newZoomFactor;
+  };
 
   useEffect(() => {
     if (!interactionElement) return;
 
     /**
-     * 10 Zoom factors = elemWidth
+     * CONTAINER_WIDTH_ZOOM_FACTORS Zoom factors = elemWidth
      */
     const pxToZoomFactor = (px: number) => {
       const { width: elemWidth } = interactionElement.getBoundingClientRect();
-      return (10 / elemWidth) * px;
+      return (CONTAINER_WIDTH_ZOOM_FACTORS / elemWidth) * px;
     };
 
     let initialDist: number = 0;
@@ -58,10 +75,13 @@ export default function usePinch({
       const diff = newDist - initialDist;
       initialDist = newDist;
       setZoomFactor((currZoom) => {
-        let newZoom = currZoom + pxToZoomFactor(diff);
-        newZoom = Math.min(maxZoom, newZoom);
-        newZoom = Math.max(minZoom, newZoom);
-        return newZoom;
+        const newRelativeZoom = validateZoomFactor(
+          currZoom.relativeZoom + pxToZoomFactor(diff),
+        );
+        return {
+          ...currZoom,
+          relativeZoom: newRelativeZoom,
+        };
       });
     }
 
@@ -70,10 +90,19 @@ export default function usePinch({
         initialDist = 0;
         setPinching(false);
         setZoomFactor((currZoom) => {
-          if (currZoom !== 0) {
-            onZoomEnd(currZoom);
+          const newAbsoluteZoom = validateZoomFactor(
+            currZoom.absoluteZoom + currZoom.relativeZoom,
+          );
+          if (currZoom.relativeZoom !== 0) {
+            onZoomEnd({
+              relativeZoom: currZoom.relativeZoom,
+              absoluteZoom: newAbsoluteZoom,
+            });
           }
-          return 0;
+          return {
+            relativeZoom: 0,
+            absoluteZoom: newAbsoluteZoom,
+          };
         });
       }
     }
