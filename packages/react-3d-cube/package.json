@@ -1,8 +1,8 @@
 {
-  "name": "orbit-interactions",
-  "version": "1.0.0",
+  "name": "react-3d-cube",
+  "version": "0.0.1",
   "main": "index.js",
-  "license": "COMMERCIAL",
+  "license": "MIT",
   "devDependencies": {
     "react": "17.0.1",
     "react-dom": "17.0.1",

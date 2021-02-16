@@ -1,0 +1,51 @@
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'packages/react-3d-cube/'
+      - 'packages/react-3d-cube/**/*'
+      - 'packages/react-3d-cube/*'
+jobs:
+  release:
+    name: Release
+    runs-on: [ubuntu-latest]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: Install global deps
+        run: |
+          npm i -g yarn
+          npm i -g cantara
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Build package
+        run: cantara build react-3d-cube
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Git Identity
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/$GITHUB_REPOSITORY
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          git fetch --all --tags
+          git fetch origin +refs/tags/*:refs/tags/*
+          git checkout main
+          git reset HEAD --hard
+          npx lerna version --conventional-commits --no-push --yes
+          npx lerna publish from-package --yes
+          git push --follow-tags
