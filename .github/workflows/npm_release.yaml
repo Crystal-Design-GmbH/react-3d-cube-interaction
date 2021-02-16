@@ -3,9 +3,9 @@ on:
     branches:
       - main
     paths:
-      - 'packages/react-3d-cube/'
-      - 'packages/react-3d-cube/**/*'
-      - 'packages/react-3d-cube/*'
+      - 'packages/react-3d-cube-interaction/'
+      - 'packages/react-3d-cube-interaction/**/*'
+      - 'packages/react-3d-cube-interaction/*'
 jobs:
   release:
     name: Release
@@ -25,7 +25,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - name: Build package
-        run: cantara build react-3d-cube
+        run: cantara build react-3d-cube-interaction
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

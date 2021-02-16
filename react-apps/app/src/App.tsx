@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import OrbitInteractions, { ControlElementRotation } from 'react-3d-cube';
+import OrbitInteractions, {
+  ControlElementRotation,
+} from 'react-3d-cube-interaction';
 
 interface Props {}
 
