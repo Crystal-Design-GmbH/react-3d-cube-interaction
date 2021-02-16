@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import {
   controlElementContainer,
   controlElement,
@@ -10,6 +10,7 @@ import {
   cubeFaceTop,
   cubeFaceBottom,
 } from './index.module.css';
+import { animateObjectValues, rotateToCubeSide } from './util/animate';
 import {
   ControlElementRotation,
   calculateElementRotation,
@@ -104,6 +105,46 @@ const OrbitInteractions: React.FC<Props> = ({
     onZoomEnd: onZoomChange,
     ...props,
   });
+
+  const rotateToBack = useCallback(() => {
+    rotateToCubeSide({
+      currentRotation: elemRotation,
+      onRotationChange: setRotationState,
+      side: 'back',
+    });
+  }, [elemRotation, setRotationState]);
+
+  const rotateToFront = useCallback(() => {
+    rotateToCubeSide({
+      currentRotation: elemRotation,
+      onRotationChange: setRotationState,
+      side: 'front',
+    });
+  }, [elemRotation, setRotationState]);
+
+  const rotateToLeft = useCallback(() => {
+    rotateToCubeSide({
+      currentRotation: elemRotation,
+      onRotationChange: setRotationState,
+      side: 'left',
+    });
+  }, [elemRotation, setRotationState]);
+
+  const rotateToRight = useCallback(() => {
+    rotateToCubeSide({
+      currentRotation: elemRotation,
+      onRotationChange: setRotationState,
+      side: 'right',
+    });
+  }, [elemRotation, setRotationState]);
+
+  const rotateToTop = useCallback(() => {
+    rotateToCubeSide({
+      currentRotation: elemRotation,
+      onRotationChange: setRotationState,
+      side: 'top',
+    });
+  }, [elemRotation, setRotationState]);
 
   useEffect(() => {
     if (!interactionElement || isPinching) return;
@@ -201,6 +242,7 @@ const OrbitInteractions: React.FC<Props> = ({
         }
       >
         <div
+          onClick={rotateToFront}
           className={`${cubeFace} ${cubeFaceFront} ${classnames?.cubeFace} ${classnames?.cubeFaceFront}`}
           ref={(elem) => {
             if (elem && faceH === 0) {
@@ -212,21 +254,25 @@ const OrbitInteractions: React.FC<Props> = ({
           {cubeFaceChildren.front}
         </div>
         <div
+          onClick={rotateToBack}
           className={`${cubeFace} ${cubeFaceBack} ${classnames?.cubeFace} ${classnames?.cubeFaceBack}`}
         >
           {cubeFaceChildren.back}
         </div>
         <div
+          onClick={rotateToRight}
           className={`${cubeFace} ${cubeFaceRight} ${classnames?.cubeFace} ${classnames?.cubeFaceRight}`}
         >
           {cubeFaceChildren.right}
         </div>
         <div
+          onClick={rotateToLeft}
           className={`${cubeFace} ${cubeFaceLeft} ${classnames?.cubeFace} ${classnames?.cubeFaceLeft}`}
         >
           {cubeFaceChildren.left}
         </div>
         <div
+          onClick={rotateToTop}
           className={`${cubeFace} ${cubeFaceTop} ${classnames?.cubeFace} ${classnames?.cubeFaceTop}`}
         >
           {cubeFaceChildren.top}
