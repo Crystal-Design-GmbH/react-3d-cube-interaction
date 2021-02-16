@@ -56,7 +56,7 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
   onRotationChange?: (p: ControlElementRotation) => void;
   /**
    * Returns a scaled value:
-   * 5 = width of interactionElement...
+   * 5 = width of interactionElement
    */
   onZoomChange?: (p: number) => void;
   classnames?: Partial<{
