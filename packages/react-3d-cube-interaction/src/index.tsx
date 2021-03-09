@@ -20,6 +20,10 @@ import {
   CalculateElementRotationResult,
   sanitizeRotation,
   snapRotation,
+  ControlElementRotationInverted,
+  normalizeRotationFormat,
+  convertToInverted,
+  CubeRotation,
 } from './util/math';
 import {
   AllPointerEventTypes,
@@ -40,7 +44,7 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
    * Defaults to document.
    */
   interactionElement?: HTMLElement;
-  initialRotation?: ControlElementRotation;
+  initialRotation?: ControlElementRotation | ControlElementRotationInverted;
   /**
    * Size of the cube.
    * Must be an __absolute__
@@ -53,7 +57,7 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
    * X rotation is a value between -90° and 0°
    * Y rotation is a value between 0° and 360°
    */
-  onRotationChange?: (p: ControlElementRotation) => void;
+  onRotationChange?: (p: CubeRotation) => void;
   /**
    * Returns a scaled value:
    * 5 = width of interactionElement
@@ -103,7 +107,7 @@ const OrbitInteractions: React.FC<Props> = ({
   ...props
 }) => {
   const [elemRotation, setRotationState] = useState<ControlElementRotation>(
-    sanitizeRotation(initialRotation),
+    sanitizeRotation(normalizeRotationFormat(initialRotation)),
   );
 
   const [faceH, setFaceH] = useState<number>(0);
@@ -204,7 +208,11 @@ const OrbitInteractions: React.FC<Props> = ({
           ...currRot,
           ...snappedRot,
         };
-        onRotationChange(snappedRot);
+        const rotationCallbackData = {
+          ...snappedRot,
+          ...convertToInverted(snappedRot),
+        };
+        onRotationChange(rotationCallbackData);
         setRotationState(snappedRot);
       }
     };
@@ -297,4 +305,4 @@ const OrbitInteractions: React.FC<Props> = ({
 
 export default OrbitInteractions;
 
-export { ControlElementRotation };
+export { CubeRotation };

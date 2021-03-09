@@ -3,6 +3,65 @@ export interface ControlElementRotation {
   rotY: number;
 }
 
+/**
+ * Represents the same rotation in a different
+ * format:
+ * - horizontal rotation = rotX
+ * - vertical rotation = rotY * -1
+ */
+export interface ControlElementRotationInverted {
+  horizontal: number;
+  vertical: number;
+}
+
+export type CubeRotation = ControlElementRotationInverted &
+  ControlElementRotation;
+
+/**
+ * Converts inverted rotation
+ * to standard ControlElementRotation
+ */
+export function convertFromInverted(
+  rotation: ControlElementRotationInverted,
+): ControlElementRotation {
+  return {
+    rotY: rotation.horizontal,
+    rotX: rotation.vertical * -1,
+  };
+}
+
+/**
+ * Converts standard rotation
+ * to inverted rotation
+ */
+export function convertToInverted(
+  rotation: ControlElementRotation,
+): ControlElementRotationInverted {
+  return {
+    horizontal: rotation.rotY,
+    vertical: rotation.rotX * -1,
+  };
+}
+
+function isInvertedRotation(
+  rotation: ControlElementRotation | ControlElementRotationInverted,
+): rotation is ControlElementRotationInverted {
+  return (rotation as ControlElementRotationInverted).horizontal !== undefined;
+}
+
+/**
+ * Converts inverted rotation
+ * to standard rotation if needed
+ */
+export function normalizeRotationFormat(
+  rotation: ControlElementRotation | ControlElementRotationInverted,
+): ControlElementRotation {
+  if (isInvertedRotation(rotation)) {
+    return convertFromInverted(rotation);
+  }
+  return rotation;
+}
+
 export function snapRotation({
   rotX,
   rotY,
