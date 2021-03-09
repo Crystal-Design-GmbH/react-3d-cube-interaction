@@ -1,5 +1,8 @@
-import React, { useState } from 'react';
-import OrbitInteractions, { CubeRotation } from 'react-3d-cube-interaction';
+import React, { useRef, useState } from 'react';
+import OrbitInteractions, {
+  CubeControlApi,
+  CubeRotation,
+} from 'react-3d-cube-interaction';
 
 interface Props {}
 
@@ -15,6 +18,8 @@ const App = ({}: Props) => {
 
   const [zoom, setZoom] = useState<number>(0);
 
+  const cubeApiRef = useRef<CubeControlApi>(null);
+
   return (
     <div>
       <div>
@@ -23,6 +28,17 @@ const App = ({}: Props) => {
         <p>Horizontal: {rot.horizontal}°</p>
         <p>Vetical: {rot.vertical}°</p>
         <p>Zoom: {zoom}</p>
+        <button
+          onClick={() => {
+            cubeApiRef.current?.rotateTo({
+              rotX: 0,
+              rotY: 0,
+              smooth: true,
+            });
+          }}
+        >
+          Rotate to 0°
+        </button>
       </div>
       <div className={orbitContainer}>
         <OrbitInteractions
@@ -38,6 +54,7 @@ const App = ({}: Props) => {
             rotY: 20,
             rotX: -20,
           }}
+          ref={cubeApiRef}
         />
       </div>
     </div>

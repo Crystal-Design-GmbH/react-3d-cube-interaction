@@ -78,11 +78,16 @@ export function animateObjectValues<TData>({
 
 type CubeSide = 'back' | 'front' | 'left' | 'right' | 'top';
 
-interface RotateToCubeSideParams {
-  side: CubeSide;
+interface RotateCubeParams {
   currentRotation: ControlElementRotation;
+  targetRotation: ControlElementRotation;
   onRotationChange: (rot: ControlElementRotation) => void;
   onRotationEnd: (rot: ControlElementRotation) => void;
+}
+
+interface RotateToCubeSideParams
+  extends Omit<RotateCubeParams, 'targetRotation'> {
+  side: CubeSide;
 }
 
 const rotationTargets: { [key in CubeSide]: ControlElementRotation } = {
@@ -108,18 +113,32 @@ const rotationTargets: { [key in CubeSide]: ControlElementRotation } = {
   },
 };
 
+export function animateToRotation({
+  targetRotation,
+  currentRotation,
+  onRotationChange,
+  onRotationEnd,
+}: RotateCubeParams) {
+  animateObjectValues<ControlElementRotation>({
+    from: currentRotation,
+    to: targetRotation,
+    duration: 500,
+    onAnimate: onRotationChange,
+    onAnimationEnd: onRotationEnd,
+  });
+}
+
 export function rotateToCubeSide({
   side,
   currentRotation,
   onRotationChange,
   onRotationEnd,
 }: RotateToCubeSideParams) {
-  const targetRot = rotationTargets[side];
-  animateObjectValues<ControlElementRotation>({
-    from: currentRotation,
-    to: targetRot,
-    duration: 500,
-    onAnimate: onRotationChange,
-    onAnimationEnd: onRotationEnd,
+  const targetRotation = rotationTargets[side];
+  animateToRotation({
+    currentRotation,
+    onRotationChange,
+    onRotationEnd,
+    targetRotation,
   });
 }
