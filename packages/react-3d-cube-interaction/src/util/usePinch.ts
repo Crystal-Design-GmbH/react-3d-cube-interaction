@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { snapZoomValue } from './math';
 
 interface ZoomData {
   absoluteZoom: number;
@@ -28,6 +29,10 @@ function calcTwoFingerDistance(e: TouchEvent) {
   );
 }
 
+/**
+ * touch = two finger zoom
+ * mouse = scroll zoom
+ */
 export default function usePinch({
   interactionElement,
   interactionMoveElement = document.body,
@@ -49,6 +54,7 @@ export default function usePinch({
   };
 
   useEffect(() => {
+    let didCancel = false;
     if (!interactionElement || !interactionMoveElement) return;
 
     /**
@@ -58,6 +64,27 @@ export default function usePinch({
       const { width: elemWidth } = interactionElement.getBoundingClientRect();
       return (CONTAINER_WIDTH_ZOOM_FACTORS / elemWidth) * px;
     };
+
+    function onZoomEndEvent() {
+      setZoomFactor((currZoom) => {
+        let newAbsoluteZoom = validateZoomFactor(
+          currZoom.absoluteZoom + currZoom.relativeZoom,
+        );
+        newAbsoluteZoom = snapZoomValue(newAbsoluteZoom);
+        if (currZoom.relativeZoom !== 0) {
+          window.requestAnimationFrame(() => {
+            onZoomEnd({
+              relativeZoom: currZoom.relativeZoom,
+              absoluteZoom: newAbsoluteZoom,
+            });
+          });
+        }
+        return {
+          relativeZoom: 0,
+          absoluteZoom: newAbsoluteZoom,
+        };
+      });
+    }
 
     let initialDist: number = 0;
     function onTouchStart(e: TouchEvent) {
@@ -91,27 +118,45 @@ export default function usePinch({
       if (e.touches.length < 2) {
         initialDist = 0;
         setPinching(false);
-        setZoomFactor((currZoom) => {
-          const newAbsoluteZoom = validateZoomFactor(
-            currZoom.absoluteZoom + currZoom.relativeZoom,
-          );
-          if (currZoom.relativeZoom !== 0) {
-            onZoomEnd({
-              relativeZoom: currZoom.relativeZoom,
-              absoluteZoom: newAbsoluteZoom,
-            });
-          }
-          return {
-            relativeZoom: 0,
-            absoluteZoom: newAbsoluteZoom,
-          };
-        });
+        onZoomEndEvent();
       }
+    }
+
+    let timeout: number | undefined = undefined;
+    function onMouseWheel(e: WheelEvent) {
+      setPinching(true);
+      if (timeout !== undefined) {
+        window.clearTimeout(timeout);
+      }
+      timeout = window.setTimeout(() => {
+        if (didCancel) return;
+        setPinching(false);
+        onZoomEndEvent();
+      }, 400);
+      const delta = e.deltaY * -1;
+      setZoomFactor((currZoom) => {
+        const newRelativeZoom = validateZoomFactor(
+          currZoom.relativeZoom + pxToZoomFactor(delta),
+        );
+        return {
+          ...currZoom,
+          relativeZoom: newRelativeZoom,
+        };
+      });
     }
 
     interactionMoveElement.addEventListener('touchmove', onTouchMove);
     interactionElement.addEventListener('touchstart', onTouchStart);
     interactionMoveElement.addEventListener('touchend', onTouchEnd);
+    interactionElement.addEventListener('wheel', onMouseWheel);
+
+    return () => {
+      didCancel = true;
+      interactionMoveElement.removeEventListener('touchmove', onTouchMove);
+      interactionElement.removeEventListener('touchstart', onTouchStart);
+      interactionMoveElement.removeEventListener('touchend', onTouchEnd);
+      interactionElement.removeEventListener('wheel', onMouseWheel);
+    };
   }, [interactionElement, minZoom, maxZoom, interactionMoveElement]);
 
   return { zoom, isPinching };

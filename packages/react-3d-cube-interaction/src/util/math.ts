@@ -69,6 +69,11 @@ export function toCubeRotation(rotation: ControlElementRotation): CubeRotation {
   };
 }
 
+export function snapZoomValue(zoom: number) {
+  const SNAP_TO = 0.5;
+  return Math.round(zoom / SNAP_TO) * SNAP_TO;
+}
+
 export function snapRotation({
   rotX,
   rotY,

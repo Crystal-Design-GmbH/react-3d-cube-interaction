@@ -235,7 +235,13 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
     }, [elemRotation, setRotationState]);
 
     useEffect(() => {
-      if (!interactionElement || !interactionMoveElement || isPinching) return;
+      if (isPinching) {
+        setHidden(false);
+        return;
+      } else {
+        setHidden(true);
+      }
+      if (!interactionElement || !interactionMoveElement) return;
       let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
       let isPointerDown = false;
 
@@ -336,6 +342,9 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       setHidden(true);
     }, [setHidden]);
 
+    const cssScaleFactor =
+      Math.max(zoom.relativeZoom, -3) / CONTAINER_WIDTH_ZOOM_FACTORS + 1;
+
     return (
       <div
         className={`${controlElementContainer}${
@@ -344,8 +353,7 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
         style={
           {
             '--size': size,
-            '--zoomFactor':
-              zoom.relativeZoom / CONTAINER_WIDTH_ZOOM_FACTORS + 1,
+            '--zoomFactor': cssScaleFactor,
             '--rotY': `${elemRotation.rotY}deg`,
             '--rotX': `${elemRotation.rotX}deg`,
             '--fontSize': `${faceH / 4.4}px`,
