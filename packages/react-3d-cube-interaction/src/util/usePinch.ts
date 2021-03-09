@@ -6,7 +6,8 @@ interface ZoomData {
 }
 
 export interface UsePinchParams {
-  interactionElement?: HTMLElement;
+  interactionElement?: HTMLElement | null;
+  interactionMoveElement?: HTMLElement | null;
   /**
    * Defaults to 10
    */
@@ -29,6 +30,7 @@ function calcTwoFingerDistance(e: TouchEvent) {
 
 export default function usePinch({
   interactionElement,
+  interactionMoveElement = document.body,
   minZoom = -10,
   maxZoom = 10,
   onZoomEnd = () => {},
@@ -47,7 +49,7 @@ export default function usePinch({
   };
 
   useEffect(() => {
-    if (!interactionElement) return;
+    if (!interactionElement || !interactionMoveElement) return;
 
     /**
      * CONTAINER_WIDTH_ZOOM_FACTORS Zoom factors = elemWidth
@@ -107,10 +109,10 @@ export default function usePinch({
       }
     }
 
-    interactionElement.addEventListener('touchmove', onTouchMove);
+    interactionMoveElement.addEventListener('touchmove', onTouchMove);
     interactionElement.addEventListener('touchstart', onTouchStart);
-    interactionElement.addEventListener('touchend', onTouchEnd);
-  }, [interactionElement, minZoom, maxZoom]);
+    interactionMoveElement.addEventListener('touchend', onTouchEnd);
+  }, [interactionElement, minZoom, maxZoom, interactionMoveElement]);
 
   return { zoom, isPinching };
 }

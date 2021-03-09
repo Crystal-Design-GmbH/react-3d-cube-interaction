@@ -11,3 +11,9 @@
   right: 3em;
   bottom: 3em;
 }
+
+.main-container {
+  height: 80vh;
+  width: 80vw;
+  background: rgba(0, 0, 0, 0.3);
+}

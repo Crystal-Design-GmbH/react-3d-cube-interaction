@@ -6,7 +6,12 @@ import OrbitInteractions, {
 
 interface Props {}
 
-import { cubeFaceLeft, cubeFaceRight, orbitContainer } from './app.module.css';
+import {
+  cubeFaceLeft,
+  cubeFaceRight,
+  orbitContainer,
+  mainContainer,
+} from './app.module.css';
 
 const App = ({}: Props) => {
   const [rot, setRot] = useState<CubeRotation>({
@@ -16,12 +21,14 @@ const App = ({}: Props) => {
     vertical: 0,
   });
 
+  const containerRef = useRef<HTMLDivElement>(null);
+
   const [zoom, setZoom] = useState<number>(0);
 
   const cubeApiRef = useRef<CubeControlApi>(null);
 
   return (
-    <div>
+    <div className={mainContainer} ref={containerRef}>
       <div>
         <p>X: {rot.rotX}°</p>
         <p>Y: {rot.rotY}°</p>
@@ -44,7 +51,7 @@ const App = ({}: Props) => {
         <OrbitInteractions
           onRotationChange={setRot}
           // onZoomChange={setZoom}
-          interactionElement={document.body}
+          interactionElement={containerRef.current}
           classnames={{
             cubeFaceLeft,
             cubeFaceRight,

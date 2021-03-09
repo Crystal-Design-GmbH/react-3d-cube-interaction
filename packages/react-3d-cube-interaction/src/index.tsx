@@ -47,10 +47,18 @@ import usePinch, {
 interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
   /**
    * Element on which to bind
-   * click/touch listeners.
-   * Defaults to document.
+   * click/touch start listeners.
+   * Defaults to document.body.
    */
-  interactionElement?: HTMLElement;
+  interactionElement?: HTMLElement | null;
+  /**
+   * Element on which to bind
+   * click/touch move listeners.
+   * This way, a gesture can continue
+   * outside of the interactionElement.
+   * Defaults to document.body.
+   */
+  interactionMoveElement?: HTMLElement | null;
   initialRotation?: ControlElementRotation | ControlElementRotationInverted;
   /**
    * Size of the cube.
@@ -108,7 +116,8 @@ export interface CubeControlApi {
 const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
   (
     {
-      interactionElement,
+      interactionElement = document.body,
+      interactionMoveElement = document.body,
       size = '130px',
       onRotationChange = () => {},
       onZoomChange = () => {},
@@ -163,6 +172,7 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
 
     const { zoom, isPinching } = usePinch({
       interactionElement,
+      interactionMoveElement,
       onZoomEnd: (zoom) => onZoomChange(zoom.absoluteZoom),
       ...props,
     });
@@ -213,7 +223,7 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
     }, [elemRotation, setRotationState]);
 
     useEffect(() => {
-      if (!interactionElement || isPinching) return;
+      if (!interactionElement || !interactionMoveElement || isPinching) return;
       let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
 
       const { width: elemWidth } = interactionElement.getBoundingClientRect();
@@ -269,26 +279,34 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
 
       interactionElement.addEventListener('touchstart', onPointerDown);
       interactionElement.addEventListener('mousedown', onPointerDown);
-      interactionElement.addEventListener('touchmove', onPointerMove);
-      interactionElement.addEventListener('mousemove', onPointerMove);
-      interactionElement.addEventListener('touchend', onInteractionEnd);
-      interactionElement.addEventListener('mouseup', onInteractionEnd);
+      interactionMoveElement.addEventListener('touchmove', onPointerMove);
+      interactionMoveElement.addEventListener('mousemove', onPointerMove);
+      interactionMoveElement.addEventListener('touchend', onInteractionEnd);
+      interactionMoveElement.addEventListener('mouseup', onInteractionEnd);
       return () => {
         // Give touchend handlers chance to execute
         setTimeout(() => {
           interactionElement.removeEventListener('touchstart', onPointerDown);
           interactionElement.removeEventListener('mousedown', onPointerDown);
-          interactionElement.removeEventListener('touchmove', onPointerMove);
-          interactionElement.removeEventListener('touchend', onInteractionEnd);
-          interactionElement.removeEventListener(
-            'mouseleave',
+          interactionMoveElement.removeEventListener(
+            'touchmove',
+            onPointerMove,
+          );
+          interactionMoveElement.removeEventListener(
+            'touchend',
             onInteractionEnd,
           );
-          interactionElement.removeEventListener('mousemove', onPointerMove);
-          interactionElement.removeEventListener('mouseup', onInteractionEnd);
+          interactionMoveElement.removeEventListener(
+            'mousemove',
+            onPointerMove,
+          );
+          interactionMoveElement.removeEventListener(
+            'mouseup',
+            onInteractionEnd,
+          );
         }, 0);
       };
-    }, [interactionElement, isPinching]);
+    }, [interactionElement, interactionMoveElement, isPinching]);
 
     return (
       <div
