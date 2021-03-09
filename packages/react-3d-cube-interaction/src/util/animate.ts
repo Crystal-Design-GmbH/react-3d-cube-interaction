@@ -66,7 +66,7 @@ export function animateObjectValues<TData>({
       window.setTimeout(() => animate(), 1000 / 60);
     } else {
       onAnimate(to);
-      onAnimationEnd(newValues as TData);
+      onAnimationEnd(to);
     }
   };
   animate();
@@ -82,6 +82,7 @@ interface RotateToCubeSideParams {
   side: CubeSide;
   currentRotation: ControlElementRotation;
   onRotationChange: (rot: ControlElementRotation) => void;
+  onRotationEnd: (rot: ControlElementRotation) => void;
 }
 
 const rotationTargets: { [key in CubeSide]: ControlElementRotation } = {
@@ -111,6 +112,7 @@ export function rotateToCubeSide({
   side,
   currentRotation,
   onRotationChange,
+  onRotationEnd,
 }: RotateToCubeSideParams) {
   const targetRot = rotationTargets[side];
   animateObjectValues<ControlElementRotation>({
@@ -118,5 +120,6 @@ export function rotateToCubeSide({
     to: targetRot,
     duration: 500,
     onAnimate: onRotationChange,
+    onAnimationEnd: onRotationEnd,
   });
 }

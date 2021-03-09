@@ -62,6 +62,13 @@ export function normalizeRotationFormat(
   return rotation;
 }
 
+export function toCubeRotation(rotation: ControlElementRotation): CubeRotation {
+  return {
+    ...rotation,
+    ...convertToInverted(rotation),
+  };
+}
+
 export function snapRotation({
   rotX,
   rotY,

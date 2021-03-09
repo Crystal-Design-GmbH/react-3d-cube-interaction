@@ -24,6 +24,7 @@ import {
   normalizeRotationFormat,
   convertToInverted,
   CubeRotation,
+  toCubeRotation,
 } from './util/math';
 import {
   AllPointerEventTypes,
@@ -112,6 +113,11 @@ const OrbitInteractions: React.FC<Props> = ({
 
   const [faceH, setFaceH] = useState<number>(0);
 
+  const onRotationEndCallback = (rot: ControlElementRotation) => {
+    setRotationState(rot);
+    onRotationChange(toCubeRotation(rot));
+  };
+
   const { zoom, isPinching } = usePinch({
     interactionElement,
     onZoomEnd: (zoom) => onZoomChange(zoom.absoluteZoom),
@@ -123,6 +129,7 @@ const OrbitInteractions: React.FC<Props> = ({
       currentRotation: elemRotation,
       onRotationChange: setRotationState,
       side: 'back',
+      onRotationEnd: onRotationEndCallback,
     });
   }, [elemRotation, setRotationState]);
 
@@ -131,6 +138,7 @@ const OrbitInteractions: React.FC<Props> = ({
       currentRotation: elemRotation,
       onRotationChange: setRotationState,
       side: 'front',
+      onRotationEnd: onRotationEndCallback,
     });
   }, [elemRotation, setRotationState]);
 
@@ -139,6 +147,7 @@ const OrbitInteractions: React.FC<Props> = ({
       currentRotation: elemRotation,
       onRotationChange: setRotationState,
       side: 'left',
+      onRotationEnd: onRotationEndCallback,
     });
   }, [elemRotation, setRotationState]);
 
@@ -147,6 +156,7 @@ const OrbitInteractions: React.FC<Props> = ({
       currentRotation: elemRotation,
       onRotationChange: setRotationState,
       side: 'right',
+      onRotationEnd: onRotationEndCallback,
     });
   }, [elemRotation, setRotationState]);
 
@@ -155,13 +165,13 @@ const OrbitInteractions: React.FC<Props> = ({
       currentRotation: elemRotation,
       onRotationChange: setRotationState,
       side: 'top',
+      onRotationEnd: onRotationEndCallback,
     });
   }, [elemRotation, setRotationState]);
 
   useEffect(() => {
     if (!interactionElement || isPinching) return;
     let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
-    let currRot: CalculateElementRotationResult | undefined = undefined;
 
     const { width: elemWidth } = interactionElement.getBoundingClientRect();
 
@@ -190,31 +200,28 @@ const OrbitInteractions: React.FC<Props> = ({
             rotX: lastRot.rotX + addRot.rotX,
             rotY: lastRot.rotY + addRot.rotY,
           });
-
-          currRot = {
+          return {
             ...addRot,
             ...sanitizedRot,
           };
-          return currRot;
         });
       }
     };
 
     const onInteractionEnd = (event: AllPointerEventTypes) => {
       pointerStartEvent = undefined;
-      if (currRot) {
+      setRotationState((currRot) => {
         const snappedRot = snapRotation(currRot);
-        currRot = {
+        let newRot = {
           ...currRot,
           ...snappedRot,
         };
-        const rotationCallbackData = {
-          ...snappedRot,
-          ...convertToInverted(snappedRot),
-        };
-        onRotationChange(rotationCallbackData);
-        setRotationState(snappedRot);
-      }
+        window.requestAnimationFrame(() => {
+          const rotationCallbackData = toCubeRotation(newRot);
+          onRotationChange(rotationCallbackData);
+        });
+        return newRot;
+      });
     };
 
     interactionElement.addEventListener('touchstart', onPointerDown);

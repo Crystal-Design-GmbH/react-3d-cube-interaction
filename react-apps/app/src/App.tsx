@@ -27,7 +27,7 @@ const App = ({}: Props) => {
       <div className={orbitContainer}>
         <OrbitInteractions
           onRotationChange={setRot}
-          onZoomChange={setZoom}
+          // onZoomChange={setZoom}
           interactionElement={document.body}
           classnames={{
             cubeFaceLeft,
