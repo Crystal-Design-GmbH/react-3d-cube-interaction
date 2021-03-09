@@ -12,6 +12,13 @@
   -webkit-user-drag: none;
   -webkit-app-region: no-drag;
   cursor: default;
+  opacity: 1;
+}
+
+.hidden {
+  opacity: 0;
+  transition: opacity calc(var(--autoHideDuration) / 2);
+  transition-delay: calc(var(--autoHideDuration) / 2);
 }
 
 .control-element-container {

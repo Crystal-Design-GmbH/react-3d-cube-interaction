@@ -15,6 +15,7 @@ import {
   cubeFaceLeft,
   cubeFaceTop,
   cubeFaceBottom,
+  hidden,
   // rotateIcon,
   // rotateIconHorizontal,
   // rotateIconVertical,
@@ -99,6 +100,12 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
     top: ReactNode;
     bottom: ReactNode;
   };
+  /**
+   * If set, cube will automatically fade
+   * away if no user interaction occured
+   * after the specified amount of milliseconds
+   */
+  autoHide?: number;
 }
 
 export interface CubeControlApi {
@@ -134,6 +141,7 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
         right: 'rechts',
         top: 'oben',
       },
+      autoHide,
       ...props
     },
     ref,
@@ -141,7 +149,6 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
     const [elemRotation, setRotationState] = useState<ControlElementRotation>(
       sanitizeRotation(normalizeRotationFormat(initialRotation)),
     );
-
     const [faceH, setFaceH] = useState<number>(0);
 
     const onRotationEndCallback = (rot: ControlElementRotation) => {
@@ -176,6 +183,11 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       onZoomEnd: (zoom) => onZoomChange(zoom.absoluteZoom),
       ...props,
     });
+
+    const shouldAutoHide = autoHide !== undefined;
+
+    // Cube is hidden automatically at the beginning if autoHide is enabled
+    const [isHidden, setHidden] = useState<boolean>(shouldAutoHide);
 
     const rotateToBack = useCallback(() => {
       rotateToCubeSide({
@@ -225,15 +237,21 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
     useEffect(() => {
       if (!interactionElement || !interactionMoveElement || isPinching) return;
       let pointerStartEvent: NormalizedInteractionEvent | undefined = undefined;
+      let isPointerDown = false;
 
       const { width: elemWidth } = interactionElement.getBoundingClientRect();
 
       const onPointerDown = (event: AllPointerEventTypes) => {
+        isPointerDown = true;
+        setHidden(false);
         const e = normalizePointerEvent(event);
         pointerStartEvent = e;
       };
 
       const onPointerMove = (event: AllPointerEventTypes) => {
+        if (isPointerDown) {
+          setHidden(false);
+        }
         const e = normalizePointerEvent(event);
         if (pointerStartEvent) {
           const addRot = calculateElementRotation({
@@ -262,6 +280,8 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       };
 
       const onInteractionEnd = (event: AllPointerEventTypes) => {
+        isPointerDown = false;
+        setHidden(true);
         pointerStartEvent = undefined;
         setRotationState((currRot) => {
           const snappedRot = snapRotation(currRot);
@@ -308,9 +328,19 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       };
     }, [interactionElement, interactionMoveElement, isPinching]);
 
+    const onElementContainerEnter = useCallback(() => {
+      setHidden(false);
+    }, [setHidden]);
+
+    const onElementContainerLeave = useCallback(() => {
+      setHidden(true);
+    }, [setHidden]);
+
     return (
       <div
-        className={controlElementContainer}
+        className={`${controlElementContainer}${
+          isHidden && shouldAutoHide ? ` ${hidden}` : ''
+        }`}
         style={
           {
             '--size': size,
@@ -319,8 +349,11 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
             '--rotY': `${elemRotation.rotY}deg`,
             '--rotX': `${elemRotation.rotX}deg`,
             '--fontSize': `${faceH / 4.4}px`,
+            '--autoHideDuration': `${(autoHide ?? 0) / 1000}s`,
           } as any
         }
+        onMouseEnter={onElementContainerEnter}
+        onMouseLeave={onElementContainerLeave}
       >
         {/* <div className={`${rotateIcon} ${rotateIconHorizontal}`}>
         <img src={rotateIconImg} alt="Rotate" />

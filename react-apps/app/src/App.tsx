@@ -51,7 +51,7 @@ const App = ({}: Props) => {
         <OrbitInteractions
           onRotationChange={setRot}
           // onZoomChange={setZoom}
-          interactionElement={containerRef.current}
+          interactionElement={document.body}
           classnames={{
             cubeFaceLeft,
             cubeFaceRight,
@@ -62,6 +62,7 @@ const App = ({}: Props) => {
             rotX: -20,
           }}
           ref={cubeApiRef}
+          autoHide={2000}
         />
       </div>
     </div>
