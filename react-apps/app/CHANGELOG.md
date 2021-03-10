@@ -3,6 +3,26 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.2.0](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.1.1...app@1.2.0) (2021-03-10)
+
+
+### Bug Fixes
+
+* call onRotationChange event when animating to side ([51afdcb](https://github.com/scriptify/react-3d-cube-interaction/commit/51afdcb847b179652ce6a5dccfb661e7b9094205))
+* move events should go beyonf interaction element ([903d24d](https://github.com/scriptify/react-3d-cube-interaction/commit/903d24ddca852d1e25d3850af8d579c77bdbc807))
+
+
+### Features
+
+* autohide option ([1d2e37e](https://github.com/scriptify/react-3d-cube-interaction/commit/1d2e37e63eb14c078e5e764ab4f2225f7ed77fd6))
+* mousewheel zoom ([3910542](https://github.com/scriptify/react-3d-cube-interaction/commit/39105429afdd2be58a5ddf6005b3e542b9878b70))
+* provide rotation in different format ([fd6efe6](https://github.com/scriptify/react-3d-cube-interaction/commit/fd6efe62d5a7b7212c590a95db86268af6a38b79))
+* rotation can be set from the outside using an external API retrieved via Refs ([3496499](https://github.com/scriptify/react-3d-cube-interaction/commit/3496499131fbb7c0195534a9936bef533354093f))
+
+
+
+
+
 ## [1.1.1](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.1.0...app@1.1.1) (2021-02-16)
 
 **Note:** Version bump only for package app
