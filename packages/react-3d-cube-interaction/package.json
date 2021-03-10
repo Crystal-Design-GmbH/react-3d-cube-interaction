@@ -13,5 +13,6 @@
     "react-dom": "17.0.1"
   },
   "dependencies": {},
-  "module": "build/esm/index.js"
+  "module": "build/esm/index.js",
+  "types": "./build/types/index.d.ts"
 }
