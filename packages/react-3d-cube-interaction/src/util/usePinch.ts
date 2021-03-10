@@ -10,6 +10,19 @@ interface ZoomData extends ZoomState {
   relativeZoomCssScaleFactor: number;
 }
 
+/**
+ * Holds information of the zoomCenter
+ * relative to the interactionElement
+ */
+interface ZoomCenterPosition {
+  x: number;
+  y: number;
+}
+
+export interface ZoomEndEventData extends ZoomState {
+  zoomCenter: ZoomCenterPosition;
+}
+
 export interface UsePinchParams {
   interactionElement?: HTMLElement | null;
   interactionMoveElement?: HTMLElement | null;
@@ -21,7 +34,7 @@ export interface UsePinchParams {
    * Defaults to -10
    */
   minZoom?: number;
-  onZoomEnd?: (zoom: ZoomState) => void;
+  onZoomEnd?: (zoom: ZoomEndEventData) => void;
   /**
    * Reset cube zoom factor
    * after MS amount of time.
@@ -37,6 +50,21 @@ function calcTwoFingerDistance(e: TouchEvent) {
     e.touches[0].pageX - e.touches[1].pageX,
     e.touches[0].pageY - e.touches[1].pageY,
   );
+}
+
+function calcTwoFingerCenter(
+  e: TouchEvent,
+  interactionElement: HTMLElement,
+): ZoomCenterPosition {
+  const {
+    top: offsetY,
+    left: offsetX,
+  } = interactionElement.getBoundingClientRect();
+
+  return {
+    x: (e.touches[0].pageX + e.touches[1].pageX) / 2 - offsetX,
+    y: (e.touches[0].pageY + e.touches[1].pageY) / 2 - offsetY,
+  };
 }
 
 /**
@@ -93,6 +121,8 @@ export default function usePinch({
       return (CONTAINER_WIDTH_ZOOM_FACTORS / elemWidth) * px;
     };
 
+    let pointerStartPos: ZoomCenterPosition | undefined = undefined;
+
     function onZoomEndEvent() {
       setZoomFactor((currZoom) => {
         let newAbsoluteZoom = validateZoomFactor(
@@ -101,10 +131,13 @@ export default function usePinch({
         newAbsoluteZoom = snapZoomValue(newAbsoluteZoom);
         if (currZoom.relativeZoom !== 0) {
           window.requestAnimationFrame(() => {
-            onZoomEnd({
-              relativeZoom: currZoom.relativeZoom,
-              absoluteZoom: newAbsoluteZoom,
-            });
+            if (pointerStartPos) {
+              onZoomEnd({
+                relativeZoom: currZoom.relativeZoom,
+                absoluteZoom: newAbsoluteZoom,
+                zoomCenter: pointerStartPos,
+              });
+            }
           });
         }
         return {
@@ -129,6 +162,9 @@ export default function usePinch({
     function onTouchStart(e: TouchEvent) {
       if (e.touches.length === 2) {
         initialDist = calcTwoFingerDistance(e);
+        if (interactionElement) {
+          pointerStartPos = calcTwoFingerCenter(e, interactionElement);
+        }
       } else {
         initialDist = 0;
       }
@@ -163,6 +199,7 @@ export default function usePinch({
 
     let timeout: number | undefined = undefined;
     function onMouseWheel(e: WheelEvent) {
+      if (!interactionElement) return;
       setPinching(true);
       if (timeout !== undefined) {
         window.clearTimeout(timeout);
@@ -173,6 +210,18 @@ export default function usePinch({
         onZoomEndEvent();
       }, 400);
       const delta = e.deltaY * -1;
+
+      const {
+        top: offsetY,
+        left: offsetX,
+      } = interactionElement.getBoundingClientRect();
+      pointerStartPos = {
+        x: e.pageX - offsetX,
+        y: e.pageY - offsetY,
+      };
+
+      console.log({ offsetX, offsetY });
+
       setZoomFactor((currZoom) => {
         const newRelativeZoom = validateZoomFactor(
           currZoom.relativeZoom + pxToZoomFactor(delta),
@@ -196,7 +245,13 @@ export default function usePinch({
       interactionMoveElement.removeEventListener('touchend', onTouchEnd);
       interactionElement.removeEventListener('wheel', onMouseWheel);
     };
-  }, [interactionElement, minZoom, maxZoom, interactionMoveElement]);
+  }, [
+    interactionElement,
+    minZoom,
+    maxZoom,
+    interactionMoveElement,
+    zoomFactorResetDelay,
+  ]);
 
   const zoomData: ZoomData = {
     ...zoom,

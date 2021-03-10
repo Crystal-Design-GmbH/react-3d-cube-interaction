@@ -36,11 +36,12 @@ import {
   NormalizedInteractionEvent,
   normalizePointerEvent,
 } from './util/pointer-events';
-import usePinch, { UsePinchParams } from './util/usePinch';
+import usePinch, { UsePinchParams, ZoomEndEventData } from './util/usePinch';
 
 // import rotateIconImg from './rotate.svg';
 
-interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
+interface Props
+  extends Pick<UsePinchParams, 'minZoom' | 'maxZoom' | 'zoomFactorResetDelay'> {
   /**
    * Element on which to bind
    * click/touch start listeners.
@@ -73,7 +74,7 @@ interface Props extends Pick<UsePinchParams, 'minZoom' | 'maxZoom'> {
    * Returns a scaled value:
    * 5 = width of interactionElement
    */
-  onZoomChange?: (p: number) => void;
+  onZoomChange?: UsePinchParams['onZoomEnd'];
   classnames?: Partial<{
     cubeFace: string;
     cubeFaceFront: string;
@@ -175,7 +176,7 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
     const { zoom, isPinching } = usePinch({
       interactionElement,
       interactionMoveElement,
-      onZoomEnd: (zoom) => onZoomChange(zoom.absoluteZoom),
+      onZoomEnd: onZoomChange,
       ...props,
     });
 
@@ -412,3 +413,4 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
 export default OrbitInteractions;
 
 export type CubeRotation = TCubeRotation;
+export type CubeZoom = ZoomEndEventData;

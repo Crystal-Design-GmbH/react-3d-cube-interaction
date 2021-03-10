@@ -2,6 +2,7 @@ import React, { useRef, useState } from 'react';
 import OrbitInteractions, {
   CubeControlApi,
   CubeRotation,
+  CubeZoom,
 } from 'react-3d-cube-interaction';
 
 interface Props {}
@@ -23,7 +24,7 @@ const App = ({}: Props) => {
 
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const [zoom, setZoom] = useState<number>(0);
+  const [zoom, setZoom] = useState<CubeZoom>();
 
   const cubeApiRef = useRef<CubeControlApi>(null);
 
@@ -34,7 +35,8 @@ const App = ({}: Props) => {
         <p>Y: {rot.rotY}°</p>
         <p>Horizontal: {rot.horizontal}°</p>
         <p>Vetical: {rot.vertical}°</p>
-        <p>Zoom: {zoom}</p>
+        <p>Zoom: {zoom?.absoluteZoom}</p>
+        <p>Zoom center: {JSON.stringify(zoom?.zoomCenter)}</p>
         <button
           onClick={() => {
             cubeApiRef.current?.rotateTo({
@@ -52,6 +54,7 @@ const App = ({}: Props) => {
           onRotationChange={setRot}
           onZoomChange={setZoom}
           interactionElement={document.body}
+          zoomFactorResetDelay={500}
           classnames={{
             cubeFaceLeft,
             cubeFaceRight,
