@@ -24,13 +24,11 @@ import { animateToRotation, rotateToCubeSide } from './util/animate';
 import {
   ControlElementRotation,
   calculateElementRotation,
-  CalculateElementRotationResult,
   sanitizeRotation,
   snapRotation,
   ControlElementRotationInverted,
   normalizeRotationFormat,
-  convertToInverted,
-  CubeRotation,
+  CubeRotation as TCubeRotation,
   toCubeRotation,
 } from './util/math';
 import {
@@ -38,10 +36,7 @@ import {
   NormalizedInteractionEvent,
   normalizePointerEvent,
 } from './util/pointer-events';
-import usePinch, {
-  CONTAINER_WIDTH_ZOOM_FACTORS,
-  UsePinchParams,
-} from './util/usePinch';
+import usePinch, { UsePinchParams } from './util/usePinch';
 
 // import rotateIconImg from './rotate.svg';
 
@@ -416,4 +411,4 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
 
 export default OrbitInteractions;
 
-export { CubeRotation };
+export type CubeRotation = TCubeRotation;

@@ -24,7 +24,7 @@ export interface UsePinchParams {
   onZoomEnd?: (zoom: ZoomState) => void;
 }
 
-export const CONTAINER_WIDTH_ZOOM_FACTORS = 5;
+const CONTAINER_WIDTH_ZOOM_FACTORS = 5;
 
 function calcTwoFingerDistance(e: TouchEvent) {
   return Math.hypot(

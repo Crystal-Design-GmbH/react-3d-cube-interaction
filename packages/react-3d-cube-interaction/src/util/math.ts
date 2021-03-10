@@ -14,8 +14,11 @@ export interface ControlElementRotationInverted {
   vertical: number;
 }
 
-export type CubeRotation = ControlElementRotationInverted &
-  ControlElementRotation;
+export interface CubeRotation
+  extends ControlElementRotationInverted,
+    ControlElementRotation {
+  ok?: boolean;
+}
 
 /**
  * Converts inverted rotation
