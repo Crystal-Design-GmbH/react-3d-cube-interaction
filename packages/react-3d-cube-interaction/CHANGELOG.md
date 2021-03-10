@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.1.1](https://github.com/scriptify/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.1.0...react-3d-cube-interaction@0.1.1) (2021-03-10)
+
+
+### Bug Fixes
+
+* correctly reference types ([a9a59ef](https://github.com/scriptify/react-3d-cube-interaction/commit/a9a59efaafea5fec4b74849767e4e19ae0ab80d0))
+
+
+
+
+
 # [0.1.0](https://github.com/scriptify/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.0.3...react-3d-cube-interaction@0.1.0) (2021-03-10)
 
 
