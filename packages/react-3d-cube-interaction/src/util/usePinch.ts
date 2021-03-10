@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { snapZoomValue } from './math';
 
-interface ZoomData {
+interface ZoomState {
   absoluteZoom: number;
   relativeZoom: number;
+}
+
+interface ZoomData extends ZoomState {
+  relativeZoomCssScaleFactor: number;
 }
 
 export interface UsePinchParams {
@@ -17,7 +21,7 @@ export interface UsePinchParams {
    * Defaults to -10
    */
   minZoom?: number;
-  onZoomEnd?: (zoom: ZoomData) => void;
+  onZoomEnd?: (zoom: ZoomState) => void;
 }
 
 export const CONTAINER_WIDTH_ZOOM_FACTORS = 5;
@@ -40,7 +44,7 @@ export default function usePinch({
   maxZoom = 10,
   onZoomEnd = () => {},
 }: UsePinchParams) {
-  const [zoom, setZoomFactor] = useState<ZoomData>({
+  const [zoom, setZoomFactor] = useState<ZoomState>({
     absoluteZoom: 0,
     relativeZoom: 0,
   });
@@ -51,6 +55,23 @@ export default function usePinch({
     newZoomFactor = Math.min(maxZoom, newZoomFactor);
     newZoomFactor = Math.max(minZoom, newZoomFactor);
     return newZoomFactor;
+  };
+
+  /**
+   * From minZoom to 0 = 0 - 1
+   * From 0 to maxZoom = 1 - 3
+   */
+  const relativeZoomToCssScale = (relativeZoom: number) => {
+    const MAX_CSS_SCALE_FACTOR = 3;
+
+    let scaleFactor = 1;
+    if (relativeZoom < 0) {
+      scaleFactor = 1 - Math.abs(relativeZoom / minZoom);
+    } else {
+      scaleFactor = (relativeZoom / maxZoom) * (MAX_CSS_SCALE_FACTOR - 1) + 1;
+    }
+
+    return scaleFactor;
   };
 
   useEffect(() => {
@@ -159,5 +180,10 @@ export default function usePinch({
     };
   }, [interactionElement, minZoom, maxZoom, interactionMoveElement]);
 
-  return { zoom, isPinching };
+  const zoomData: ZoomData = {
+    ...zoom,
+    relativeZoomCssScaleFactor: relativeZoomToCssScale(zoom.relativeZoom),
+  };
+
+  return { zoom: zoomData, isPinching };
 }

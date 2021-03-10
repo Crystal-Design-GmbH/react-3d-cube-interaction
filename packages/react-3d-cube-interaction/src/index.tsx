@@ -342,9 +342,6 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       setHidden(true);
     }, [setHidden]);
 
-    const cssScaleFactor =
-      Math.max(zoom.relativeZoom, -3) / CONTAINER_WIDTH_ZOOM_FACTORS + 1;
-
     return (
       <div
         className={`${controlElementContainer}${
@@ -353,7 +350,7 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
         style={
           {
             '--size': size,
-            '--zoomFactor': cssScaleFactor,
+            '--zoomFactor': zoom.relativeZoomCssScaleFactor,
             '--rotY': `${elemRotation.rotY}deg`,
             '--rotX': `${elemRotation.rotX}deg`,
             '--fontSize': `${faceH / 4.4}px`,
