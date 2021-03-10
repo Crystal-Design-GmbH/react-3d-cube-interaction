@@ -22,6 +22,12 @@ export interface UsePinchParams {
    */
   minZoom?: number;
   onZoomEnd?: (zoom: ZoomState) => void;
+  /**
+   * Reset cube zoom factor
+   * after MS amount of time.
+   * Defaults to 500.
+   */
+  zoomFactorResetDelay?: number;
 }
 
 const CONTAINER_WIDTH_ZOOM_FACTORS = 5;
@@ -43,6 +49,7 @@ export default function usePinch({
   minZoom = -10,
   maxZoom = 10,
   onZoomEnd = () => {},
+  zoomFactorResetDelay = 500,
 }: UsePinchParams) {
   const [zoom, setZoomFactor] = useState<ZoomState>({
     absoluteZoom: 0,
@@ -101,10 +108,21 @@ export default function usePinch({
           });
         }
         return {
-          relativeZoom: 0,
+          ...currZoom,
           absoluteZoom: newAbsoluteZoom,
         };
       });
+      // Reset relative zoom after a certain delay
+      window.setTimeout(() => {
+        if (!didCancel) {
+          setZoomFactor((currZoom) => {
+            return {
+              ...currZoom,
+              relativeZoom: 0,
+            };
+          });
+        }
+      }, zoomFactorResetDelay);
     }
 
     let initialDist: number = 0;
