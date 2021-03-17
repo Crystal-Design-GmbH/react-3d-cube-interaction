@@ -22,14 +22,25 @@ const App = ({}: Props) => {
     vertical: 0,
   });
 
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerElem, setContainerElem] = useState<HTMLDivElement>();
 
   const [zoom, setZoom] = useState<CubeZoom>();
+
+  function onZoomChange(newZoom: CubeZoom) {
+    setZoom(newZoom);
+  }
 
   const cubeApiRef = useRef<CubeControlApi>(null);
 
   return (
-    <div className={mainContainer} ref={containerRef}>
+    <div
+      className={mainContainer}
+      ref={(ref) => {
+        if (ref) {
+          setContainerElem(ref);
+        }
+      }}
+    >
       <div>
         <p>X: {rot.rotX}°</p>
         <p>Y: {rot.rotY}°</p>
@@ -52,17 +63,17 @@ const App = ({}: Props) => {
       <div className={orbitContainer}>
         <OrbitInteractions
           onRotationChange={setRot}
-          onZoomChange={setZoom}
-          interactionElement={document.body}
+          onZoomChange={onZoomChange}
+          interactionElement={containerElem}
           zoomFactorResetDelay={500}
           classnames={{
             cubeFaceLeft,
             cubeFaceRight,
           }}
-          size="120px"
+          size="80px"
           initialRotation={{
-            rotY: 20,
-            rotX: -20,
+            horizontal: 20,
+            vertical: 20,
           }}
           ref={cubeApiRef}
           autoHide={2000}

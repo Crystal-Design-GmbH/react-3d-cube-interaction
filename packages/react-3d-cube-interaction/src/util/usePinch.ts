@@ -220,8 +220,6 @@ export default function usePinch({
         y: e.pageY - offsetY,
       };
 
-      console.log({ offsetX, offsetY });
-
       setZoomFactor((currZoom) => {
         const newRelativeZoom = validateZoomFactor(
           currZoom.relativeZoom + pxToZoomFactor(delta),
