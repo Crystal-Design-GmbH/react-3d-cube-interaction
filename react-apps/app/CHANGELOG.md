@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.3.0](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.2.1...app@1.3.0) (2021-03-10)
+
+
+### Features
+
+* calculate and provide zoom center ([dd80e28](https://github.com/scriptify/react-3d-cube-interaction/commit/dd80e28ea66ebc73de72d7f70985d6ed69aeef7f))
+
+
+
+
+
 ## [1.2.1](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.2.0...app@1.2.1) (2021-03-10)
 
 **Note:** Version bump only for package app

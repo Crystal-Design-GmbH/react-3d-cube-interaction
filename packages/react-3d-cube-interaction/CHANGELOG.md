@@ -3,6 +3,18 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.2.0](https://github.com/scriptify/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.1.1...react-3d-cube-interaction@0.2.0) (2021-03-10)
+
+
+### Features
+
+* calculate and provide zoom center ([dd80e28](https://github.com/scriptify/react-3d-cube-interaction/commit/dd80e28ea66ebc73de72d7f70985d6ed69aeef7f))
+* reset zoom factor after specified delay ([5e60ca3](https://github.com/scriptify/react-3d-cube-interaction/commit/5e60ca314669ab2532f4a769c063fdc6aa51bae4))
+
+
+
+
+
 ## [0.1.1](https://github.com/scriptify/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.1.0...react-3d-cube-interaction@0.1.1) (2021-03-10)
 
 
