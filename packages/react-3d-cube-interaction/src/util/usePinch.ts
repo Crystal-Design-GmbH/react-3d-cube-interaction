@@ -109,6 +109,17 @@ export default function usePinch({
     return scaleFactor;
   };
 
+  function resetRelativeZoom() {
+    window.setTimeout(() => {
+      setZoomFactor((currZoom) => {
+        return {
+          ...currZoom,
+          relativeZoom: 0,
+        };
+      });
+    }, zoomFactorResetDelay);
+  }
+
   useEffect(() => {
     let didCancel = false;
     if (!interactionElement || !interactionMoveElement) return;
@@ -146,16 +157,9 @@ export default function usePinch({
         };
       });
       // Reset relative zoom after a certain delay
-      window.setTimeout(() => {
-        if (!didCancel) {
-          setZoomFactor((currZoom) => {
-            return {
-              ...currZoom,
-              relativeZoom: 0,
-            };
-          });
-        }
-      }, zoomFactorResetDelay);
+      if (!didCancel) {
+        resetRelativeZoom();
+      }
     }
 
     let initialDist: number = 0;
@@ -256,5 +260,33 @@ export default function usePinch({
     relativeZoomCssScaleFactor: relativeZoomToCssScale(zoom.relativeZoom),
   };
 
-  return { zoom: zoomData, isPinching };
+  function setAbsoluteZoomFromOutside(newAbsoluteZoomParam: number) {
+    const newAbsoluteZoom = validateZoomFactor(newAbsoluteZoomParam);
+    setZoomFactor((currZoom) => {
+      const interactionElementDimensions = interactionElement?.getBoundingClientRect();
+      const zoomCenterX = interactionElementDimensions
+        ? interactionElementDimensions.width / 2
+        : 0;
+      const zoomCenterY = interactionElementDimensions
+        ? interactionElementDimensions.height / 2
+        : 0;
+
+      window.requestAnimationFrame(() => {
+        onZoomEnd({
+          relativeZoom: 0,
+          absoluteZoom: newAbsoluteZoom,
+          zoomCenter: { x: zoomCenterX, y: zoomCenterY },
+        });
+        resetRelativeZoom();
+      });
+
+      return {
+        ...currZoom,
+        relativeZoom: newAbsoluteZoom - currZoom.absoluteZoom,
+        absoluteZoom: newAbsoluteZoom,
+      };
+    });
+  }
+
+  return { zoom: zoomData, isPinching, setAbsoluteZoomFromOutside };
 }

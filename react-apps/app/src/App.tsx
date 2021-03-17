@@ -59,6 +59,13 @@ const App = ({}: Props) => {
         >
           Rotate to 0°
         </button>
+        <button
+          onClick={() => {
+            cubeApiRef.current?.setZoom(1);
+          }}
+        >
+          Set zoom to 1
+        </button>
       </div>
       <div className={orbitContainer}>
         <OrbitInteractions

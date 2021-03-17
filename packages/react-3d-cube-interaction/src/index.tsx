@@ -114,6 +114,12 @@ export interface CubeControlApi {
       smooth?: boolean;
     },
   ) => any;
+  /**
+   * sets the current, absolute zoom.
+   * Also fires onZoomChange callback.
+   */
+  setZoom: (newAbsoluteZoom: number) => void;
+  getAbsoluteZoom: () => number;
 }
 
 const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
@@ -152,10 +158,19 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       onRotationChange(toCubeRotation(rot));
     };
 
+    const { zoom, isPinching, setAbsoluteZoomFromOutside } = usePinch({
+      interactionElement,
+      interactionMoveElement,
+      onZoomEnd: onZoomChange,
+      ...props,
+    });
+
     // External API
     useImperativeHandle(
       ref,
       () => ({
+        getAbsoluteZoom: () => zoom.absoluteZoom,
+        setZoom: setAbsoluteZoomFromOutside,
         rotateTo: (newRotation) => {
           const normalizedRotation = normalizeRotationFormat(newRotation);
           if (newRotation.smooth) {
@@ -170,15 +185,8 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
           }
         },
       }),
-      [elemRotation, setRotationState],
+      [elemRotation, setRotationState, zoom],
     );
-
-    const { zoom, isPinching } = usePinch({
-      interactionElement,
-      interactionMoveElement,
-      onZoomEnd: onZoomChange,
-      ...props,
-    });
 
     const shouldAutoHide = autoHide !== undefined;
 
