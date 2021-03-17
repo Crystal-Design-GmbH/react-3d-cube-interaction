@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.3.1](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.3.0...app@1.3.1) (2021-03-17)
+
+
+### Bug Fixes
+
+* remove useless log and adjust sample ([8781443](https://github.com/scriptify/react-3d-cube-interaction/commit/8781443e49945896fed2b22986b045cf55f56ba2))
+
+
+
+
+
 # [1.3.0](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.2.1...app@1.3.0) (2021-03-10)
 
 
