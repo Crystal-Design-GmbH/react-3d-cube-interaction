@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.4.0](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.3.1...app@1.4.0) (2021-03-17)
+
+
+### Features
+
+* zoom can be set from the outside ([ea30a2b](https://github.com/scriptify/react-3d-cube-interaction/commit/ea30a2ba3c7e25c6a0dd620a740f94542bb2299b))
+
+
+
+
+
 ## [1.3.1](https://github.com/scriptify/react-3d-cube-interaction/compare/app@1.3.0...app@1.3.1) (2021-03-17)
 
 
