@@ -290,21 +290,24 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       };
 
       const onInteractionEnd = (event: AllPointerEventTypes) => {
-        isPointerDown = false;
-        setHidden(true);
-        pointerStartEvent = undefined;
-        setRotationState((currRot) => {
-          const snappedRot = snapRotation(currRot);
-          let newRot = {
-            ...currRot,
-            ...snappedRot,
-          };
-          window.requestAnimationFrame(() => {
-            const rotationCallbackData = toCubeRotation(newRot);
-            onRotationChange(rotationCallbackData);
+        console.log('onInteractionEnd');
+        if (isPointerDown) {
+          setHidden(true);
+          pointerStartEvent = undefined;
+          setRotationState((currRot) => {
+            const snappedRot = snapRotation(currRot);
+            let newRot = {
+              ...currRot,
+              ...snappedRot,
+            };
+            window.requestAnimationFrame(() => {
+              const rotationCallbackData = toCubeRotation(newRot);
+              onRotationChange(rotationCallbackData);
+            });
+            return newRot;
           });
-          return newRot;
-        });
+        }
+        isPointerDown = false;
       };
 
       interactionElement.addEventListener('touchstart', onPointerDown);

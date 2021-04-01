@@ -61,6 +61,28 @@ const App = ({}: Props) => {
         </button>
         <button
           onClick={() => {
+            cubeApiRef.current?.rotateTo({
+              rotX: 0,
+              rotY: 45,
+              smooth: true,
+            });
+          }}
+        >
+          Rotate to 0°/45°
+        </button>
+        <button
+          onClick={() => {
+            cubeApiRef.current?.rotateTo({
+              rotX: 45,
+              rotY: 45,
+              smooth: true,
+            });
+          }}
+        >
+          Rotate to 45°/45°
+        </button>
+        <button
+          onClick={() => {
             cubeApiRef.current?.setZoom(1);
           }}
         >
