@@ -34,6 +34,18 @@ export interface UsePinchParams {
    * Defaults to -10
    */
   minZoom?: number;
+  /**
+   * Maximum absolute
+   * css scale factor.
+   * Defaults to 3
+   */
+  maxCssScale?: number;
+  /**
+   * Minimum absolute
+   * css scale factor.
+   * Defaults to 0
+   */
+  minCssScale?: number;
   onZoomEnd?: (zoom: ZoomEndEventData) => void;
   /**
    * Reset cube zoom factor
@@ -78,6 +90,8 @@ export default function usePinch({
   maxZoom = 10,
   onZoomEnd = () => {},
   zoomFactorResetDelay = 500,
+  maxCssScale = 3,
+  minCssScale = 0,
 }: UsePinchParams) {
   const [zoom, setZoomFactor] = useState<ZoomState>({
     absoluteZoom: 0,
@@ -97,16 +111,14 @@ export default function usePinch({
    * From 0 to maxZoom = 1 - 3
    */
   const relativeZoomToCssScale = (relativeZoom: number) => {
-    const MAX_CSS_SCALE_FACTOR = 3;
-
     let scaleFactor = 1;
     if (relativeZoom < 0) {
       scaleFactor = 1 - Math.abs(relativeZoom / minZoom);
     } else {
-      scaleFactor = (relativeZoom / maxZoom) * (MAX_CSS_SCALE_FACTOR - 1) + 1;
+      scaleFactor = (relativeZoom / maxZoom) * (maxCssScale - 1) + 1;
     }
 
-    return scaleFactor;
+    return Math.max(scaleFactor, minCssScale);
   };
 
   function resetRelativeZoom() {

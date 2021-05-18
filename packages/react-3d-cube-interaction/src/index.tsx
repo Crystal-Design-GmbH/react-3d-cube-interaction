@@ -41,7 +41,14 @@ import usePinch, { UsePinchParams, ZoomEndEventData } from './util/usePinch';
 // import rotateIconImg from './rotate.svg';
 
 interface Props
-  extends Pick<UsePinchParams, 'minZoom' | 'maxZoom' | 'zoomFactorResetDelay'> {
+  extends Pick<
+    UsePinchParams,
+    | 'minZoom'
+    | 'maxZoom'
+    | 'zoomFactorResetDelay'
+    | 'maxCssScale'
+    | 'minCssScale'
+  > {
   /**
    * Element on which to bind
    * click/touch start listeners.
@@ -290,7 +297,6 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       };
 
       const onInteractionEnd = (event: AllPointerEventTypes) => {
-        console.log('onInteractionEnd');
         if (isPointerDown) {
           setHidden(true);
           pointerStartEvent = undefined;

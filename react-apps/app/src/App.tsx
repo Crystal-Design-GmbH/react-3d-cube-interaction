@@ -106,6 +106,8 @@ const App = ({}: Props) => {
           }}
           ref={cubeApiRef}
           autoHide={2000}
+          maxCssScale={2}
+          minCssScale={0.5}
         />
       </div>
     </div>
