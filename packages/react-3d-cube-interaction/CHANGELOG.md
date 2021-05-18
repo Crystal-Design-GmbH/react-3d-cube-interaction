@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.3.1](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.3.0...react-3d-cube-interaction@0.3.1) (2021-04-01)
+
+
+### Bug Fixes
+
+* make sure onInteractionEnd is only called when drag occured ([f261310](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/commit/f26131042787de82b54e347eb7ac36d099ee363a))
+
+
+
+
+
 # [0.3.0](https://github.com/scriptify/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.2.1...react-3d-cube-interaction@0.3.0) (2021-03-17)
 
 
