@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.5.0](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/app@1.4.1...app@1.5.0) (2021-05-18)
+
+
+### Features
+
+* added maxCssScale and minCssScale as public properties ([ac3f529](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/commit/ac3f5297e078de57a3ee61530d1c2e4d6e0fd5cd))
+
+
+
+
+
 ## [1.4.1](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/app@1.4.0...app@1.4.1) (2021-04-01)
 
 
