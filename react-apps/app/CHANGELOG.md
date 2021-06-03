@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [1.6.0](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/app@1.5.0...app@1.6.0) (2021-06-03)
+
+
+### Features
+
+* added disableDefaultScrollBehaviour parameter ([d810a9d](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/commit/d810a9d0241ba62d75c7385a087831f4810235ca))
+
+
+
+
+
 # [1.5.0](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/app@1.4.1...app@1.5.0) (2021-05-18)
 
 
