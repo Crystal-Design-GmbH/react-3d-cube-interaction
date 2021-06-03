@@ -48,6 +48,7 @@ interface Props
     | 'zoomFactorResetDelay'
     | 'maxCssScale'
     | 'minCssScale'
+    | 'disableDefaultScrollBehaviour'
   > {
   /**
    * Element on which to bind

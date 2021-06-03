@@ -24,6 +24,12 @@ export interface ZoomEndEventData extends ZoomState {
 }
 
 export interface UsePinchParams {
+  /**
+   * If set true, the browser's
+   * default scroll behaviour is
+   * disabled. Defaults to false.
+   */
+  disableDefaultScrollBehaviour?: boolean;
   interactionElement?: HTMLElement | null;
   interactionMoveElement?: HTMLElement | null;
   /**
@@ -92,6 +98,7 @@ export default function usePinch({
   zoomFactorResetDelay = 500,
   maxCssScale = 3,
   minCssScale = 0,
+  disableDefaultScrollBehaviour,
 }: UsePinchParams) {
   const [zoom, setZoomFactor] = useState<ZoomState>({
     absoluteZoom: 0,
@@ -216,6 +223,12 @@ export default function usePinch({
     let timeout: number | undefined = undefined;
     function onMouseWheel(e: WheelEvent) {
       if (!interactionElement) return;
+      // If event is prevented, the original
+      // scroll behaviour of the browser
+      // is disabled
+      if (disableDefaultScrollBehaviour) {
+        e.preventDefault();
+      }
       setPinching(true);
       if (timeout !== undefined) {
         window.clearTimeout(timeout);
@@ -265,6 +278,7 @@ export default function usePinch({
     maxZoom,
     interactionMoveElement,
     zoomFactorResetDelay,
+    disableDefaultScrollBehaviour,
   ]);
 
   const zoomData: ZoomData = {

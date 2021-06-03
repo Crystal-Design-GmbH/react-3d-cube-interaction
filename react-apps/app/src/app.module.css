@@ -20,3 +20,9 @@
   top: 50px;
   left: 50px;
 }
+
+.scroll-placeholder-container {
+  width: 100%;
+  background: red;
+  margin-top: 100vh;
+}
