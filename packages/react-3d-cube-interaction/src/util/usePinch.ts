@@ -191,6 +191,10 @@ export default function usePinch({
       } else {
         initialDist = 0;
       }
+      //prevents the scrolling by touch
+      if (disableDefaultScrollBehaviour) {
+        e.preventDefault();
+      }
     }
 
     function onTouchMove(e: TouchEvent) {
@@ -259,7 +263,6 @@ export default function usePinch({
         };
       });
     }
-
     interactionMoveElement.addEventListener('touchmove', onTouchMove);
     interactionElement.addEventListener('touchstart', onTouchStart);
     interactionMoveElement.addEventListener('touchend', onTouchEnd);
