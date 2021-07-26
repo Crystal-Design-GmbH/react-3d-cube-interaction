@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { snapZoomValue } from './math';
 
+import { clearTextSelection } from './clearTextSelection';
+
 interface ZoomState {
   absoluteZoom: number;
   relativeZoom: number;
@@ -183,6 +185,7 @@ export default function usePinch({
 
     let initialDist: number = 0;
     function onTouchStart(e: TouchEvent) {
+      clearTextSelection();
       if (e.touches.length === 2) {
         initialDist = calcTwoFingerDistance(e);
         if (interactionElement) {

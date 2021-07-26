@@ -20,6 +20,7 @@ import {
   // rotateIconHorizontal,
   // rotateIconVertical,
 } from './index.module.css';
+import { clearTextSelection } from './util/clearTextSelection';
 import { animateToRotation, rotateToCubeSide } from './util/animate';
 import {
   ControlElementRotation,
@@ -260,6 +261,7 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
       const { width: elemWidth } = interactionElement.getBoundingClientRect();
 
       const onPointerDown = (event: AllPointerEventTypes) => {
+        clearTextSelection();
         isPointerDown = true;
         setHidden(false);
         const e = normalizePointerEvent(event);
