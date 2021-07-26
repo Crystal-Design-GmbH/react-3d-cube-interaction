@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.5.2](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.5.1...react-3d-cube-interaction@0.5.2) (2021-07-26)
+
+
+### Bug Fixes
+
+* clearTextSelection on interactions ([9ba76b9](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/commit/9ba76b94ad60a87f9a3f1333068ae9fe6e274362))
+
+
+
+
+
 ## [0.5.1](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.5.0...react-3d-cube-interaction@0.5.1) (2021-07-13)
 
 
