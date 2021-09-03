@@ -36,6 +36,10 @@
     rotate3d(1, 0, 0, var(--rotX)) rotate3d(0, 1, 0, var(--rotY));
 }
 
+.control-element div {
+  outline: 1px solid transparent;
+}
+
 .cube-face {
   position: absolute;
   width: var(--size);
