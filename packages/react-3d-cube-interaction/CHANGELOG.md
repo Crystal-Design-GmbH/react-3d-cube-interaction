@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+# [0.6.0](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.5.4...react-3d-cube-interaction@0.6.0) (2021-10-14)
+
+
+### Features
+
+* hiddenState outsourced if needed ([2e46322](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/commit/2e46322128961903a075e95c017d7c97e36a3608))
+
+
+
+
+
 ## [0.5.4](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.5.3...react-3d-cube-interaction@0.5.4) (2021-09-03)
 
 
