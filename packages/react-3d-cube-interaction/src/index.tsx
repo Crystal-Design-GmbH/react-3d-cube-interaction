@@ -66,6 +66,11 @@ interface Props
    */
   interactionMoveElement?: HTMLElement | null;
   initialRotation?: ControlElementRotation | ControlElementRotationInverted;
+
+  /**
+   * If the hiddenState must influence something outside alswell
+   */
+  hiddenState?: [boolean, React.Dispatch<React.SetStateAction<boolean>>];
   /**
    * Size of the cube.
    * Must be an __absolute__
@@ -134,6 +139,7 @@ export interface CubeControlApi {
 const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
   (
     {
+      hiddenState,
       interactionElement = document.body,
       interactionMoveElement = document.body,
       size = '130px',
@@ -200,7 +206,9 @@ const OrbitInteractions = React.forwardRef<CubeControlApi, Props>(
     const shouldAutoHide = autoHide !== undefined;
 
     // Cube is hidden automatically at the beginning if autoHide is enabled
-    const [isHidden, setHidden] = useState<boolean>(shouldAutoHide);
+
+    const [isHidden, setHidden] =
+      hiddenState ?? useState<boolean>(shouldAutoHide);
 
     const rotateToBack = useCallback(() => {
       rotateToCubeSide({
