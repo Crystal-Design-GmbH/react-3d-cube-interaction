@@ -20,7 +20,6 @@ interface AnimateObjectValuesParams<TData> {
  * of an object. Both objects
  * are expected to have
  * the same properties.
- *
  */
 export function animateObjectValues<TData>({
   to,
