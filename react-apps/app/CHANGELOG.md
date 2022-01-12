@@ -3,6 +3,14 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [1.6.2](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/app@1.6.1...app@1.6.2) (2022-01-12)
+
+**Note:** Version bump only for package app
+
+
+
+
+
 ## [1.6.1](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/app@1.6.0...app@1.6.1) (2021-07-13)
 
 

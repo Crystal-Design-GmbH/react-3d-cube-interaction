@@ -3,6 +3,17 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [0.6.1](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.6.0...react-3d-cube-interaction@0.6.1) (2022-01-12)
+
+
+### Bug Fixes
+
+* node version to 14 ([756536c](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/commit/756536c04106e1f0850fc6e27682c502c71a1369))
+
+
+
+
+
 # [0.6.0](https://github.com/Crystal-Design-GmbH/react-3d-cube-interaction/compare/react-3d-cube-interaction@0.5.4...react-3d-cube-interaction@0.6.0) (2021-10-14)
 
 
