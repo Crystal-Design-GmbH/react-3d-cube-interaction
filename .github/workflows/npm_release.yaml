@@ -20,7 +20,7 @@ jobs:
       - name: Install global deps
         run: |
           npm i -g yarn
-          npm i -g cantara@next
+          npm i -g cantara
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
